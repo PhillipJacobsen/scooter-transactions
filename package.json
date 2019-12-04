@@ -1,0 +1,32 @@
+{
+  "name": "@e-m-s-y/scooter-registration-transaction",
+  "version": "0.0.1",
+  "description": "A custom scooter registration transaction.",
+  "author": "e-m-s-y",
+  "license": "MIT",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "test": "node ./src/test.js"
+  },
+  "dependencies": {
+    "@arkecosystem/core-event-emitter": "^2.6.0-next.5",
+    "@arkecosystem/core-transactions": "^2.6.0-next.5",
+    "@arkecosystem/crypto": "^2.6.0-next.5",
+    "bytebuffer": "^5.0.1"
+  },
+  "homepage": "https://github.com/e-m-s-y/scooter-registration-transaction",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/e-m-s-y/scooter-registration-transaction.git"
+  },
+  "bugs": {
+    "url": "https://github.com/e-m-s-y/scooter-registration-transaction/issues"
+  },
+  "keywords": [
+    "arkecosystem",
+    "plugin",
+    "scooter",
+    "transaction"
+  ]
+}
