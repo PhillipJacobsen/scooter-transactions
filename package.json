@@ -1,7 +1,7 @@
 {
-  "name": "@e-m-s-y/scooter-registration-transaction",
+  "name": "@e-m-s-y/scooter-transactions",
   "version": "0.0.1",
-  "description": "A custom scooter registration transaction.",
+  "description": "Custom transaction types for the Ark Scooter project.",
   "author": "e-m-s-y",
   "license": "MIT",
   "main": "src/index.js",
@@ -10,18 +10,18 @@
     "test": "node ./src/test.js"
   },
   "dependencies": {
-    "@arkecosystem/core-event-emitter": "^2.6.0-next.5",
-    "@arkecosystem/core-transactions": "^2.6.0-next.5",
-    "@arkecosystem/crypto": "^2.6.0-next.5",
+    "@arkecosystem/core-event-emitter": "^2.6.0-next.6",
+    "@arkecosystem/core-transactions": "^2.6.0-next.6",
+    "@arkecosystem/crypto": "^2.6.0-next.6",
     "bytebuffer": "^5.0.1"
   },
-  "homepage": "https://github.com/e-m-s-y/scooter-registration-transaction",
+  "homepage": "https://github.com/e-m-s-y/scooter-transactions",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/e-m-s-y/scooter-registration-transaction.git"
+    "url": "git+https://github.com/e-m-s-y/scooter-transactions.git"
   },
   "bugs": {
-    "url": "https://github.com/e-m-s-y/scooter-registration-transaction/issues"
+    "url": "https://github.com/e-m-s-y/scooter-transactions/issues"
   },
   "keywords": [
     "arkecosystem",
