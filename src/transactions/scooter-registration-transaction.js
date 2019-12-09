@@ -1,6 +1,7 @@
 const Crypto = require('@arkecosystem/crypto');
 const ByteBuffer = require('bytebuffer');
 const Types = require('./types');
+const Schemas = require('./schemas');
 
 const SCOOTER_REGISTRATION_TYPE = Types.SCOOTER_REGISTRATION_TYPE;
 const SCOOTER_REGISTRATION_TYPE_GROUP = Types.TYPE_GROUP;
@@ -39,11 +40,7 @@ class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 					type: "object",
 					required: ["scooterId"],
 					properties: {
-						scooterId: {
-							type: "string",
-							minLength: 10,
-							maxLength: 10
-						}
+						scooterId: Schemas.SCOOTER_ID,
 					}
 				}
 			}
