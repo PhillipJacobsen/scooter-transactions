@@ -1,0 +1,4 @@
+module.exports = {
+	TYPE_GROUP: 4000,
+	SCOOTER_REGISTRATION_TYPE: 400
+};
