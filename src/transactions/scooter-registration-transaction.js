@@ -21,7 +21,7 @@ class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 	static getSchema() {
 		return Crypto.Transactions.schemas.extend(Crypto.Transactions.schemas.transactionBaseSchema, {
 			$id: "scooterId",
-			required: ["asset", "typeGroup"],
+			required: ["asset", "type", "typeGroup"],
 			properties: {
 				type: {
 					transactionType: SCOOTER_REGISTRATION_TYPE
