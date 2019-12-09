@@ -23,9 +23,18 @@ class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 			$id: "scooterId",
 			required: ["asset", "typeGroup"],
 			properties: {
-				type: {transactionType: SCOOTER_REGISTRATION_TYPE},
-				typeGroup: {const: SCOOTER_REGISTRATION_TYPE_GROUP},
-				amount: {bignumber: {minimum: 0, maximum: 0}},
+				type: {
+					transactionType: SCOOTER_REGISTRATION_TYPE
+				},
+				typeGroup: {
+					const: SCOOTER_REGISTRATION_TYPE_GROUP
+				},
+				amount: {
+					bignumber: {
+						minimum: 0,
+						maximum: 0
+					}
+				},
 				asset: {
 					type: "object",
 					required: ["scooterId"],
