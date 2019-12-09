@@ -1,6 +1,7 @@
 const Transactions = require('@arkecosystem/core-transactions');
 const ScooterRegistrationTransaction = require('../transactions/scooter-registration-transaction');
 const Errors = require('../errors');
+const Events = require('../events');
 
 class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandler {
 	getConstructor() {
@@ -49,7 +50,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 	}
 
 	emitEvents(transaction, emitter) {
-		emitter.emit('scooter.registered', transaction.data);
+		emitter.emit(Events.SCOOTER_REGISTERED, transaction.data);
 	}
 
 	async canEnterTransactionPool(data, pool, processor) {
