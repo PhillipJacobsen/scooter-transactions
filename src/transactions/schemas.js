@@ -22,7 +22,7 @@ module.exports = {
 				type: "object",
 				required: ["scooterId"],
 				properties: {
-					"scooterId": SchemaParameters.SCOOTER_ID,
+					scooterId: SchemaParameters.SCOOTER_ID,
 				}
 			}
 		}
@@ -36,11 +36,6 @@ module.exports = {
 			},
 			typeGroup: {
 				const: Types.TYPE_GROUP
-			},
-			amount: {
-				bignumber: {
-					minimum: 1,
-				}
 			},
 			asset: {
 				type: "object",
@@ -58,9 +53,8 @@ module.exports = {
 							minimum: 1,
 						}
 					},
-					optional1: SchemaParameters.OPTIONAL_PARAMETER_1,
-					optional2: SchemaParameters.OPTIONAL_PARAMETER_2,
-					optional3: SchemaParameters.OPTIONAL_PARAMETER_3,
+					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
+					optionalNumber: SchemaParameters.NUMBER_PARAMETER,
 				}
 			}
 		}

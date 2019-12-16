@@ -1,69 +1,78 @@
 const Crypto = require('@arkecosystem/crypto');
 const ByteBuffer = require('bytebuffer');
-const SCOOTER_REGISTRATION_TYPE = 400;
-const SCOOTER_REGISTRATION_TYPE_GROUP = 4000;
+const Schema = require('./schemas').RentalStart;
 
-class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
+class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	static get typeGroup() {
-		return SCOOTER_REGISTRATION_TYPE_GROUP;
+		return Schema.properties.typeGroup.const;
 	}
 
 	static get type() {
-		return SCOOTER_REGISTRATION_TYPE;
+		return Schema.properties.type.transactionType;
 	}
 
 	static get key() {
-		return 'scooter_registration_transaction_key';
+		return Schema.$id;
 	}
 
 	static getSchema() {
-		return Crypto.Transactions.schemas.extend(Crypto.Transactions.schemas.transactionBaseSchema, {
-			$id: "scooterId",
-			required: ["asset", "typeGroup"],
-			properties: {
-				type: {transactionType: SCOOTER_REGISTRATION_TYPE},
-				typeGroup: {const: SCOOTER_REGISTRATION_TYPE_GROUP},
-				amount: {bignumber: {minimum: 0, maximum: 0}},
-				asset: {
-					type: "object",
-					required: ["scooterId"],
-					properties: {
-						scooterId: {
-							type: "string",
-							minLength: 10,
-							maxLength: 10
-						}
-					}
-				}
-			}
-		});
+		return Crypto.Transactions.schemas.extend(Crypto.Transactions.schemas.transactionBaseSchema, Schema);
 	}
 
 	static get defaultStaticFee() {
-		return Crypto.Utils.BigNumber.make("3000000000");
+		return 0;
+	}
+
+	hasVendorField() {
+		return true;
 	}
 
 	serialize() {
-		const {data} = this;
-		const scooterId = data.asset.scooterId;
-		const scooterIdBytes = Buffer.from(scooterId, "utf8");
-		const buffer = new ByteBuffer(scooterIdBytes.length, true);
+		const properties = [
+			this.data.amount.toString(),
+			this.data.asset.scooterId,
+			this.data.asset.hash,
+			this.data.asset.gps,
+			this.data.asset.rate.toString(),
+			this.data.asset.optionalInteger ? this.data.asset.optionalInteger.toString() : '',
+			this.data.asset.optionalNumber ? this.data.asset.optionalNumber.toString() : ''
+		];
 
-		buffer.writeUint8(scooterIdBytes.length);
-		buffer.append(scooterIdBytes, "hex");
+		const buffer = new ByteBuffer(properties.join('').length, true);
+
+		for(const property of properties) {
+			let bytes = Buffer.from(property);
+
+			// TODO Can I always use writeUint8 here?
+			buffer.writeUint8(bytes.length);
+			buffer.append(bytes);
+			// buffer.append(bytes, "hex");
+		}
 
 		return buffer;
 	}
 
 	deserialize(buffer) {
-		const {data} = this;
-		const scooterIdLength = buffer.readUint8();
-		const scooterId = buffer.readString(scooterIdLength);
-
-		data.asset = {
-			scooterId: scooterId
+		this.data.amount = Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()));
+		this.data.asset = {
+			scooterId: buffer.readString(buffer.readUint8()),
+			hash: buffer.readString(buffer.readUint8()),
+			gps: buffer.readString(buffer.readUint8()),
+			rate: Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()))
 		};
+
+		const optionalInteger = buffer.readString(buffer.readUint8());
+
+		if(optionalInteger) {
+			this.data.asset.optionalInteger = Number(optionalInteger);
+		}
+
+		const optionalNumber = buffer.readString(buffer.readUint8());
+
+		if(optionalNumber) {
+			this.data.asset.optionalNumber = Number(optionalNumber);
+		}
 	}
 }
 
-module.exports = ScooterRegistrationTransaction;
+module.exports = RentalStartTransaction;

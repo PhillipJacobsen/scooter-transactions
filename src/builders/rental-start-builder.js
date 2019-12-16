@@ -1,18 +1,13 @@
 const Crypto = require('@arkecosystem/crypto');
-const ScooterRegistrationTransaction = require('../transactions/scooter-registration-transaction');
+const RentalStartTransaction = require('../transactions/rental-start-transaction');
 
-
-var test = {
-	
-};
-
-class ScooterRegistrationBuilder extends Crypto.Transactions.TransactionBuilder {
+class RentalStartBuilder extends Crypto.Transactions.TransactionBuilder {
 	constructor() {
 		super();
-		this.data.type = ScooterRegistrationTransaction.type;
-		this.data.typeGroup = ScooterRegistrationTransaction.typeGroup;
+		this.data.type = RentalStartTransaction.type;
+		this.data.typeGroup = RentalStartTransaction.typeGroup;
 		this.data.version = 2;
-		this.data.fee = ScooterRegistrationTransaction.defaultStaticFee;
+		this.data.fee = RentalStartTransaction.defaultStaticFee;
 		this.data.amount = Crypto.Utils.BigNumber.ZERO;
 		this.data.asset = {};
 	}
@@ -20,7 +15,37 @@ class ScooterRegistrationBuilder extends Crypto.Transactions.TransactionBuilder 
 	scooterId(id) {
 		this.data.asset.scooterId = id;
 
-		return this;
+		return this.instance();
+	}
+
+	hash(value) {
+		this.data.asset.hash = value;
+
+		return this.instance();
+	}
+
+	gps(coordinates) {
+		this.data.asset.gps = coordinates;
+
+		return this.instance();
+	}
+
+	rate(amount) {
+		this.data.asset.rate = Crypto.Utils.BigNumber.make(amount);
+
+		return this.instance();
+	}
+
+	optionalInteger(value) {
+		this.data.asset.optionalInteger = value;
+
+		return this.instance();
+	}
+
+	optionalNumber(value) {
+		this.data.asset.optionalNumber = value;
+
+		return this.instance();
 	}
 
 	getStruct() {
@@ -28,6 +53,7 @@ class ScooterRegistrationBuilder extends Crypto.Transactions.TransactionBuilder 
 
 		struct.amount = this.data.amount;
 		struct.asset = this.data.asset;
+		struct.vendorField = this.data.vendorField;
 
 		return struct;
 	}
@@ -37,4 +63,4 @@ class ScooterRegistrationBuilder extends Crypto.Transactions.TransactionBuilder 
 	}
 }
 
-module.exports = new ScooterRegistrationBuilder();
+module.exports = new RentalStartBuilder();

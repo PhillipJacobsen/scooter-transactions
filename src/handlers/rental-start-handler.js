@@ -1,11 +1,12 @@
+const RentalStartTransaction = require('../transactions/rental-start-transaction');
 const Transactions = require('@arkecosystem/core-transactions');
-const ScooterRegistrationTransaction = require('../transactions/scooter-registration-transaction');
+const WalletAttributes = require('./wallet-attributes');
 const Errors = require('../errors');
 const Events = require('../events');
 
-class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandler {
+class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	getConstructor() {
-		return ScooterRegistrationTransaction;
+		return RentalStartTransaction;
 	}
 
 	dependencies() {
@@ -14,7 +15,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 
 	walletAttributes() {
 		return [
-			'transactionWalletKeyName'
+			WalletAttributes.IS_RENTED
 		];
 	}
 
@@ -31,26 +32,34 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByPublicKey(transaction.senderPublicKey);
 
-				wallet.setAttribute('transactionWalletKeyName', transaction.asset);
+				wallet.setAttribute(WalletAttributes.IS_RENTED, true);
 				walletManager.reindex(wallet);
 			}
 		}
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
-		if(!transaction.data.asset.scooterId) {
-			throw new Errors.ScooterRegistrationAssetError();
+		if(!transaction.data.asset.scooterId
+			|| !transaction.data.asset.hash
+			|| !transaction.data.asset.gps
+			|| !transaction.data.asset.rate
+		) {
+			throw new Errors.IncompleteAssetError();
 		}
 
-		if(sender.hasAttribute('transactionWalletKeyName')) {
-			throw new Errors.WalletIsAlreadyRegisterdAsAScooter();
+		if(!sender.hasAttribute('isRegisteredAsScooter')) {
+			throw new Errors.WalletIsNotRegisterdAsAScooter();
+		}
+
+		if(sender.hasAttribute(WalletAttributes.IS_RENTED)) {
+			throw new Errors.ScooterIsAlreadyRented();
 		}
 
 		await super.throwIfCannotBeApplied(transaction, sender, walletManager);
 	}
 
 	emitEvents(transaction, emitter) {
-		emitter.emit(Events.SCOOTER_REGISTERED, transaction.data);
+		emitter.emit(Events.RENTAL_START, transaction.data);
 	}
 
 	async canEnterTransactionPool(data, pool, processor) {
@@ -58,22 +67,22 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			return false;
 		}
 
-		const transactionsWithGivenScooterId = processor.getTransactions().filter((transaction) => {
+		let transactions = processor.getTransactions().filter((transaction) => {
 			return transaction.type === this.getConstructor().type && transaction.asset.scooterId === data.asset.scooterId;
 		});
 
-		if(transactionsWithGivenScooterId.length > 1) {
-			processor.pushError(data, 'ERR_CONFLICT', `Scooter registration ID "${data.asset.scooterId}" already exists.`);
+		if(transactions.length > 1) {
+			processor.pushError(data, 'ERR_CONFLICT', `Scooter "${data.asset.scooterId}" is already rented.`);
 
 			return false;
 		}
 
-		const poolTransactionsWithGivenScooterId = Array.from(await pool.getTransactionsByType(this.getConstructor().type)).filter((transaction) => {
+		transactions = Array.from(await pool.getTransactionsByType(this.getConstructor().type)).filter((transaction) => {
 			return transaction.data.asset.scooterId === data.asset.scooterId;
 		});
 
-		if(poolTransactionsWithGivenScooterId.length > 1) {
-			processor.pushError(data, 'ERR_PENDING', `Scooter registration ID "${data.asset.scooterId}" is already in the pool.`);
+		if(transactions.length > 1) {
+			processor.pushError(data, 'ERR_PENDING', `Rental request for scooter "${data.asset.scooterId}" is already in the transaction pool.`);
 
 			return false;
 		}
@@ -85,7 +94,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.applyToSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		sender.setAttribute('transactionWalletKeyName', transaction.data.asset);
+		sender.setAttribute(WalletAttributes.IS_RENTED, true);
 		walletManager.reindex(sender);
 	}
 
@@ -93,7 +102,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.revertForSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		sender.forgetAttribute('transactionWalletKeyName');
+		sender.forgetAttribute(WalletAttributes.IS_RENTED);
 		walletManager.reindex(sender);
 	}
 
@@ -104,4 +113,4 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 	}
 }
 
-module.exports = ScooterRegistrationHandler;
+module.exports = RentalStartHandler;
