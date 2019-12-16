@@ -14,7 +14,6 @@ class ScooterRegistrationBuilder extends Crypto.Transactions.TransactionBuilder 
 
 	scooterId(id) {
 		this.data.asset.scooterId = id;
-		console.log(this);
 
 		return this;
 	}
