@@ -1,3 +1,4 @@
 module.exports = {
-	SCOOTER_REGISTERED: 'scooter.registered'
+	SCOOTER_REGISTERED: 'scooter.registered',
+	RENTAL_START: 'scooter.rental.start',
 };

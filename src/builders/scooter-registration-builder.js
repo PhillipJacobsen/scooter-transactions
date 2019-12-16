@@ -1,11 +1,6 @@
 const Crypto = require('@arkecosystem/crypto');
 const ScooterRegistrationTransaction = require('../transactions/scooter-registration-transaction');
 
-
-var test = {
-	
-};
-
 class ScooterRegistrationBuilder extends Crypto.Transactions.TransactionBuilder {
 	constructor() {
 		super();
@@ -19,6 +14,7 @@ class ScooterRegistrationBuilder extends Crypto.Transactions.TransactionBuilder 
 
 	scooterId(id) {
 		this.data.asset.scooterId = id;
+		console.log(this);
 
 		return this;
 	}

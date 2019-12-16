@@ -1,50 +1,22 @@
 const Crypto = require('@arkecosystem/crypto');
 const ByteBuffer = require('bytebuffer');
-const Types = require('./types');
-const Schemas = require('./schemas');
-
-const SCOOTER_REGISTRATION_TYPE = Types.SCOOTER_REGISTRATION_TYPE;
-const SCOOTER_REGISTRATION_TYPE_GROUP = Types.TYPE_GROUP;
+const Schema = require('./schemas').ScooterRegistrationSchema;
 
 class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 	static get typeGroup() {
-		return SCOOTER_REGISTRATION_TYPE_GROUP;
+		return Schema.properties.typeGroup.const;
 	}
 
 	static get type() {
-		return SCOOTER_REGISTRATION_TYPE;
+		return Schema.properties.type.transactionType;
 	}
 
 	static get key() {
-		return 'scooter_registration_transaction_key';
+		return 'scooterRegistration';
 	}
 
 	static getSchema() {
-		return Crypto.Transactions.schemas.extend(Crypto.Transactions.schemas.transactionBaseSchema, {
-			$id: "scooterId",
-			required: ["asset", "type", "typeGroup"],
-			properties: {
-				type: {
-					transactionType: SCOOTER_REGISTRATION_TYPE
-				},
-				typeGroup: {
-					const: SCOOTER_REGISTRATION_TYPE_GROUP
-				},
-				amount: {
-					bignumber: {
-						minimum: 0,
-						maximum: 0
-					}
-				},
-				asset: {
-					type: "object",
-					required: ["scooterId"],
-					properties: {
-						scooterId: Schemas.SCOOTER_ID,
-					}
-				}
-			}
-		});
+		return Crypto.Transactions.schemas.extend(Crypto.Transactions.schemas.transactionBaseSchema, Schema);
 	}
 
 	static get defaultStaticFee() {
@@ -53,23 +25,20 @@ class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 
 	serialize() {
 		const {data} = this;
-		const scooterId = data.asset.scooterId;
-		const scooterIdBytes = Buffer.from(scooterId, "utf8");
-		const buffer = new ByteBuffer(scooterIdBytes.length, true);
+		const bytes = Buffer.from(data.asset.scooterId);
+		const buffer = new ByteBuffer(bytes.length, true);
 
-		buffer.writeUint8(scooterIdBytes.length);
-		buffer.append(scooterIdBytes, "hex");
+		buffer.writeUint8(bytes.length);
+		buffer.append(bytes, "hex");
 
 		return buffer;
 	}
 
 	deserialize(buffer) {
 		const {data} = this;
-		const scooterIdLength = buffer.readUint8();
-		const scooterId = buffer.readString(scooterIdLength);
 
 		data.asset = {
-			scooterId: scooterId
+			scooterId: buffer.readString(buffer.readUint8())
 		};
 	}
 }

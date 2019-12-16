@@ -1,22 +1,31 @@
+const SchemaParameters = require("./schema-parameters");
+const Types = require("./types");
+const SCOOTER_ID = "scooterId";
+
 module.exports = {
-	SCOOTER_ID: {
-		type: "string",
-		minLength: 10,
-		maxLength: 10
-	},
-	EXTRA_PARAMETER_1: {
-		type: "string",
-		minLength: 1,
-		maxLength: 128
-	},
-	EXTRA_PARAMETER_2: {
-		type: "integer",
-		minLength: 1,
-		maxLength: 32
-	},
-	EXTRA_PARAMETER_3: {
-		type: "float",
-		minLength: 1,
-		maxLength: 32
+	ScooterRegistrationSchema: {
+		$id: SCOOTER_ID,
+		required: ["asset", "type", "typeGroup"],
+		properties: {
+			type: {
+				transactionType: Types.SCOOTER_REGISTRATION_TYPE
+			},
+			typeGroup: {
+				const: Types.TYPE_GROUP
+			},
+			amount: {
+				bignumber: {
+					minimum: 0,
+					maximum: 0
+				}
+			},
+			asset: {
+				type: "object",
+				required: [SCOOTER_ID],
+				properties: {
+					[SCOOTER_ID]: SchemaParameters.SCOOTER_ID,
+				}
+			}
+		}
 	}
 };
