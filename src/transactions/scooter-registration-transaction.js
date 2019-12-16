@@ -12,7 +12,7 @@ class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	static get key() {
-		return 'scooterRegistration';
+		return Schema.$id;
 	}
 
 	static getSchema() {
