@@ -1,6 +1,6 @@
+const Schema = require('./schemas').RentalStart;
 const Crypto = require('@arkecosystem/crypto');
 const ByteBuffer = require('bytebuffer');
-const Schema = require('./schemas').RentalStart;
 
 class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	static get typeGroup() {

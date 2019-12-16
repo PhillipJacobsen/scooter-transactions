@@ -1,5 +1,5 @@
-const Crypto = require('@arkecosystem/crypto');
 const RentalFinishTransaction = require('../transactions/rental-finish-transaction');
+const Crypto = require('@arkecosystem/crypto');
 
 class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 	constructor() {

@@ -1,5 +1,5 @@
-const Crypto = require('@arkecosystem/crypto');
 const ScooterRegistrationTransaction = require('../transactions/scooter-registration-transaction');
+const Crypto = require('@arkecosystem/crypto');
 
 class ScooterRegistrationBuilder extends Crypto.Transactions.TransactionBuilder {
 	constructor() {
