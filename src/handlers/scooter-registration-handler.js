@@ -14,7 +14,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 
 	walletAttributes() {
 		return [
-			'transactionWalletKeyName'
+			'isRegisteredAsScooter'
 		];
 	}
 
@@ -31,7 +31,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByPublicKey(transaction.senderPublicKey);
 
-				wallet.setAttribute('transactionWalletKeyName', transaction.asset);
+				wallet.setAttribute('isRegisteredAsScooter', true);
 				walletManager.reindex(wallet);
 			}
 		}
@@ -39,10 +39,10 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
 		if(!transaction.data.asset.scooterId) {
-			throw new Errors.ScooterRegistrationAssetError();
+			throw new Errors.IncompleteAssetError();
 		}
 
-		if(sender.hasAttribute('transactionWalletKeyName')) {
+		if(sender.hasAttribute('isRegisteredAsScooter')) {
 			throw new Errors.WalletIsAlreadyRegisterdAsAScooter();
 		}
 
@@ -85,7 +85,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.applyToSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		sender.setAttribute('transactionWalletKeyName', transaction.data.asset);
+		sender.setAttribute('isRegisteredAsScooter', true);
 		walletManager.reindex(sender);
 	}
 
@@ -93,7 +93,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.revertForSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		sender.forgetAttribute('transactionWalletKeyName');
+		sender.forgetAttribute('isRegisteredAsScooter');
 		walletManager.reindex(sender);
 	}
 

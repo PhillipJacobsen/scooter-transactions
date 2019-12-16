@@ -1,8 +1,8 @@
 const Transactions = require('@arkecosystem/core-transactions');
 
-class ScooterRegistrationAssetError extends Transactions.Errors.TransactionError {
+class IncompleteAssetError extends Transactions.Errors.TransactionError {
 	constructor() {
-		super('Incomplete scooter registration asset.');
+		super('Incomplete asset data.');
 	}
 }
 
@@ -13,6 +13,6 @@ class WalletIsAlreadyRegisterdAsAScooter extends Transactions.Errors.Transaction
 }
 
 module.exports = {
-	ScooterRegistrationAssetError,
+	IncompleteAssetError,
 	WalletIsAlreadyRegisterdAsAScooter,
 };
