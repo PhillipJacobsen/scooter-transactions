@@ -16,5 +16,8 @@ module.exports = {
 		type: "string", // TODO what type to use? Ask PJ.
 		minLength: 1,
 		maxLength: 16
+	},
+	TRANSACTION_ID: {
+		$ref: "transactionId"
 	}
 };

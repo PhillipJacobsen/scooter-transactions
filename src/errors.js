@@ -24,9 +24,16 @@ class ScooterIsAlreadyRented extends Transactions.Errors.TransactionError {
 	}
 }
 
+class ScooterIsNotRented extends Transactions.Errors.TransactionError {
+	constructor() {
+		super('This scooter is not rented.');
+	}
+}
+
 module.exports = {
 	IncompleteAssetError,
 	WalletIsAlreadyRegisterdAsAScooter,
 	WalletIsNotRegisterdAsAScooter,
-	ScooterIsAlreadyRented
+	ScooterIsAlreadyRented,
+	ScooterIsNotRented
 };

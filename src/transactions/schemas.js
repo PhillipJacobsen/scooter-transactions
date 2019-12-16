@@ -58,5 +58,28 @@ module.exports = {
 				}
 			}
 		}
+	},
+	RentalFinish: {
+		$id: "rentalFinish",
+		required: ["asset", "type", "typeGroup", "recipientId"],
+		properties: {
+			type: {
+				transactionType: Types.RENTAL_FINISH_TYPE
+			},
+			typeGroup: {
+				const: Types.TYPE_GROUP
+			},
+			recipientId: {$ref: "address"},
+			asset: {
+				type: "object",
+				required: ["gps"],
+				properties: {
+					gps: SchemaParameters.GPS,
+					rentalTransactionId: SchemaParameters.TRANSACTION_ID,
+					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
+					optionalNumber: SchemaParameters.NUMBER_PARAMETER
+				}
+			}
+		}
 	}
 };
