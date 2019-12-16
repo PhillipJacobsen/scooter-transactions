@@ -14,10 +14,10 @@ cd ~/{core-bridgechain}/plugins && git clone https://github.com/e-m-s-y/scooter-
     enabled: true
 }
 ```
-3 Bootstrap the plugin.
+3 Build the plugin.
 ```bash
 cd ~/{core-bridgechain}
-yarn bootstrap
+yarn build
 ```
 4 Restart your relay.
 
