@@ -30,7 +30,7 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	serialize() {
 		const properties = [
 			this.data.amount.toString(),
-			this.data.asset.scooterId,
+			this.data.recipientId,
 			this.data.asset.hash,
 			this.data.asset.gps,
 			this.data.asset.rate.toString(),
@@ -54,8 +54,8 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 
 	deserialize(buffer) {
 		this.data.amount = Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()));
+		this.data.recipientId = buffer.readString(buffer.readUint8());
 		this.data.asset = {
-			scooterId: buffer.readString(buffer.readUint8()),
 			hash: buffer.readString(buffer.readUint8()),
 			gps: buffer.readString(buffer.readUint8()),
 			rate: Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()))

@@ -22,7 +22,7 @@ module.exports = {
 				type: "object",
 				required: ["scooterId"],
 				properties: {
-					scooterId: SchemaParameters.SCOOTER_ID,
+					scooterId: SchemaParameters.SCOOTER_ID
 				}
 			}
 		}
@@ -39,9 +39,8 @@ module.exports = {
 			},
 			asset: {
 				type: "object",
-				required: ["scooterId", "hash", "gps", "rate"],
+				required: ["hash", "gps", "rate"],
 				properties: {
-					scooterId: SchemaParameters.SCOOTER_ID,
 					hash: {
 						type: "string",
 						minLength: 1,
@@ -50,11 +49,11 @@ module.exports = {
 					gps: SchemaParameters.GPS,
 					rate: {
 						bignumber: {
-							minimum: 1,
+							minimum: 1
 						}
 					},
 					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
-					optionalNumber: SchemaParameters.NUMBER_PARAMETER,
+					optionalNumber: SchemaParameters.NUMBER_PARAMETER
 				}
 			}
 		}

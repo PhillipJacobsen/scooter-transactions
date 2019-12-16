@@ -30,7 +30,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 			const transactions = await reader.read();
 
 			for(const transaction of transactions) {
-				const wallet = walletManager.findByPublicKey(transaction.senderPublicKey);
+				const wallet = walletManager.findByAddress(transaction.recipientId);
 
 				wallet.setAttribute(WalletAttributes.IS_RENTED, true);
 				walletManager.reindex(wallet);
@@ -39,19 +39,17 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
-		if(!transaction.data.asset.scooterId
-			|| !transaction.data.asset.hash
-			|| !transaction.data.asset.gps
-			|| !transaction.data.asset.rate
-		) {
+		if(!transaction.data.asset.hash || !transaction.data.asset.gps || !transaction.data.asset.rate) {
 			throw new Errors.IncompleteAssetError();
 		}
 
-		if(!sender.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+		const recipient = walletManager.findByAddress(transaction.data.recipientId);
+
+		if(!recipient.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsNotRegisterdAsAScooter();
 		}
 
-		if(sender.hasAttribute(WalletAttributes.IS_RENTED)) {
+		if(recipient.hasAttribute(WalletAttributes.IS_RENTED)) {
 			throw new Errors.ScooterIsAlreadyRented();
 		}
 
@@ -68,21 +66,21 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 		}
 
 		let transactions = processor.getTransactions().filter((transaction) => {
-			return transaction.type === this.getConstructor().type && transaction.asset.scooterId === data.asset.scooterId;
+			return transaction.type === this.getConstructor().type && transaction.asset.hash === data.asset.hash;
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_CONFLICT', `Scooter "${data.asset.scooterId}" is already rented.`);
+			processor.pushError(data, 'ERR_CONFLICT', `Scooter with hash "${data.asset.hash}" is already rented.`);
 
 			return false;
 		}
 
 		transactions = Array.from(await pool.getTransactionsByType(this.getConstructor().type)).filter((transaction) => {
-			return transaction.data.asset.scooterId === data.asset.scooterId;
+			return transaction.data.asset.hash === data.asset.hash;
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_PENDING', `Rental request for scooter "${data.asset.scooterId}" is already in the transaction pool.`);
+			processor.pushError(data, 'ERR_PENDING', `Rental request for scooter with hash "${data.asset.hash}" is already in the transaction pool.`);
 
 			return false;
 		}
@@ -91,25 +89,25 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async applyToSender(transaction, walletManager) {
-		await super.applyToSender(transaction, walletManager);
-		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
-
-		sender.setAttribute(WalletAttributes.IS_RENTED, true);
-		walletManager.reindex(sender);
 	}
 
 	async revertForSender(transaction, walletManager) {
-		await super.revertForSender(transaction, walletManager);
-		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
-
-		sender.forgetAttribute(WalletAttributes.IS_RENTED);
-		walletManager.reindex(sender);
 	}
 
 	async applyToRecipient(transaction, walletManager) {
+		await super.applyToRecipient(transaction, walletManager);
+		const recipient = walletManager.findByAddress(transaction.data.recipientId);
+
+		recipient.setAttribute(WalletAttributes.IS_RENTED, true);
+		walletManager.reindex(recipient);
 	}
 
 	async revertForRecipient(transaction, walletManager) {
+		await super.revertForRecipient(transaction, walletManager);
+		const recipient = walletManager.findByAddress(transaction.data.recipientId);
+
+		recipient.forgetAttribute(WalletAttributes.IS_RENTED);
+		walletManager.reindex(recipient);
 	}
 }
 

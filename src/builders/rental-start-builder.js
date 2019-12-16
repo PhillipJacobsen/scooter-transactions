@@ -12,12 +12,6 @@ class RentalStartBuilder extends Crypto.Transactions.TransactionBuilder {
 		this.data.asset = {};
 	}
 
-	scooterId(id) {
-		this.data.asset.scooterId = id;
-
-		return this.instance();
-	}
-
 	hash(value) {
 		this.data.asset.hash = value;
 
@@ -54,6 +48,7 @@ class RentalStartBuilder extends Crypto.Transactions.TransactionBuilder {
 		struct.amount = this.data.amount;
 		struct.asset = this.data.asset;
 		struct.vendorField = this.data.vendorField;
+		struct.recipientId = this.data.recipientId;
 
 		return struct;
 	}
