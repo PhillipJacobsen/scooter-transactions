@@ -70,7 +70,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_CONFLICT', `Scooter with hash "${data.asset.hash}" is already rented.`);
+			processor.pushError(data, 'ERR_CONFLICT', `Scooter with address "${data.asset.recipientId}" is already rented.`);
 
 			return false;
 		}
@@ -80,7 +80,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_PENDING', `Rental request for scooter with hash "${data.asset.hash}" is already in the transaction pool.`);
+			processor.pushError(data, 'ERR_PENDING', `Rental start request for scooter with address "${data.asset.recipientId}" is already in the transaction pool.`);
 
 			return false;
 		}
