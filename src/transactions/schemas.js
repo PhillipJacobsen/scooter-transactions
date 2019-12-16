@@ -29,7 +29,7 @@ module.exports = {
 	},
 	RentalStart: {
 		$id: "rentalStart",
-		required: ["asset", "type", "typeGroup"],
+		required: ["asset", "type", "typeGroup", "recipientId"],
 		properties: {
 			type: {
 				transactionType: Types.RENTAL_START_TYPE
@@ -37,6 +37,7 @@ module.exports = {
 			typeGroup: {
 				const: Types.TYPE_GROUP
 			},
+			recipientId: {$ref: "address"},
 			asset: {
 				type: "object",
 				required: ["hash", "gps", "rate"],

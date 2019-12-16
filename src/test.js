@@ -39,7 +39,7 @@ transaction = RentalStartBuilder
 	.amount('1')
 	.vendorField('string max 255 length')
 	.optionalInteger(123456)
-	.recipientId('ABADSGS')
+	.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 	.optionalNumber(100.001111) // TODO 100.00 becomes 100 (loses .00 which might cause bugs when using for GPS coords).
 	.nonce('1')
 	.sign('jar width fee ostrich fantasy vehicle thank doctor teach family bottom trap');
