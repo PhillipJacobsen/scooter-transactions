@@ -51,26 +51,25 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 			return false;
 		}
 
-		// TODO how to differentiate transactions with an ID or hash?
-		// let transactions = processor.getTransactions().filter((transaction) => {
-		// 	return transaction.type === this.getConstructor().type && transaction.asset.hash === data.asset.hash;
-		// });
-		//
-		// if(transactions.length > 1) {
-		// 	processor.pushError(data, 'ERR_CONFLICT', `Scooter with hash "${data.asset.hash}" is already rented.`);
-		//
-		// 	return false;
-		// }
-		//
-		// transactions = Array.from(await pool.getTransactionsByType(this.getConstructor().type)).filter((transaction) => {
-		// 	return transaction.data.asset.hash === data.asset.hash;
-		// });
-		//
-		// if(transactions.length > 1) {
-		// 	processor.pushError(data, 'ERR_PENDING', `Rental request for scooter with hash "${data.asset.hash}" is already in the transaction pool.`);
-		//
-		// 	return false;
-		// }
+		let transactions = processor.getTransactions().filter((transaction) => {
+			return transaction.type === this.getConstructor().type && transaction.asset.rentalTransactionId === data.asset.rentalTransactionId;
+		});
+
+		if(transactions.length > 1) {
+			processor.pushError(data, 'ERR_CONFLICT', `Scooter with address "${data.asset.recipientId}" is already rented.`);
+
+			return false;
+		}
+
+		transactions = Array.from(await pool.getTransactionsByType(this.getConstructor().type)).filter((transaction) => {
+			return transaction.data.asset.rentalTransactionId === data.asset.rentalTransactionId;
+		});
+
+		if(transactions.length > 1) {
+			processor.pushError(data, 'ERR_PENDING', `Rental finish request for scooter with address "${data.asset.recipientId}" is already in the transaction pool.`);
+
+			return false;
+		}
 
 		return true;
 	}
