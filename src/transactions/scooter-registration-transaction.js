@@ -1,6 +1,6 @@
 const Crypto = require('@arkecosystem/crypto');
 const ByteBuffer = require('bytebuffer');
-const Schema = require('./schemas').ScooterRegistrationSchema;
+const Schema = require('./schemas').ScooterRegistration;
 
 class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 	static get typeGroup() {
