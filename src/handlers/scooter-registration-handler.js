@@ -1,5 +1,6 @@
-const Transactions = require('@arkecosystem/core-transactions');
 const ScooterRegistrationTransaction = require('../transactions/scooter-registration-transaction');
+const Transactions = require('@arkecosystem/core-transactions');
+const WalletAttributes = require('./wallet-attributes');
 const Errors = require('../errors');
 const Events = require('../events');
 
@@ -14,7 +15,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 
 	walletAttributes() {
 		return [
-			'isRegisteredAsScooter'
+			WalletAttributes.IS_REGISTERED_AS_SCOOTER
 		];
 	}
 
@@ -31,7 +32,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByPublicKey(transaction.senderPublicKey);
 
-				wallet.setAttribute('isRegisteredAsScooter', true);
+				wallet.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
 				walletManager.reindex(wallet);
 			}
 		}
@@ -42,7 +43,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			throw new Errors.IncompleteAssetError();
 		}
 
-		if(sender.hasAttribute('isRegisteredAsScooter')) {
+		if(sender.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsAlreadyRegisterdAsAScooter();
 		}
 
@@ -85,7 +86,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.applyToSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		sender.setAttribute('isRegisteredAsScooter', true);
+		sender.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
 		walletManager.reindex(sender);
 	}
 
@@ -93,7 +94,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.revertForSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		sender.forgetAttribute('isRegisteredAsScooter');
+		sender.forgetAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER);
 		walletManager.reindex(sender);
 	}
 
