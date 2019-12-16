@@ -35,9 +35,7 @@ class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	deserialize(buffer) {
-		const {data} = this;
-
-		data.asset = {
+		this.data.asset = {
 			scooterId: buffer.readString(buffer.readUint8())
 		};
 	}
