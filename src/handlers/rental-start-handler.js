@@ -47,7 +47,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 			throw new Errors.IncompleteAssetError();
 		}
 
-		if(!sender.hasAttribute('isRegisteredAsScooter')) {
+		if(!sender.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsNotRegisterdAsAScooter();
 		}
 
