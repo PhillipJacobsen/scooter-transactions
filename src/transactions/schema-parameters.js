@@ -13,7 +13,7 @@ module.exports = {
 		maxLength: 64
 	},
 	GPS: {
-		type: "string", // TODO what type to use? Ask PJ.
+		type: "string",
 		minLength: 1,
 		maxLength: 16
 	},

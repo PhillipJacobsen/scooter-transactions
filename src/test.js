@@ -16,7 +16,7 @@ Crypto.Transactions.TransactionRegistry.registerTransactionType(RentalFinishTran
 
 let transaction = ScooterRegistrationBuilder
 	.scooterId('1234567890')
-	.nonce('1')
+	.nonce('2')
 	.sign('jar width fee ostrich fantasy vehicle thank doctor teach family bottom trap');
 
 let serialized = transaction.build().serialized.toString('hex');
@@ -32,8 +32,8 @@ let transactions = JSON.stringify({
 	]
 });
 
-console.log("\ncurl --request POST \ \n--url https://radians.nl/api/transactions \ \n" +
-	`--header 'content-type: application/json' \ \n--data '${transactions}'\n`);
+console.log("\ncurl --request POST --url https://radians.nl/api/transactions " +
+	`--header 'content-type: application/json' --data '${transactions}'`);
 
 transaction = RentalStartBuilder
 	.hash('asabasdb-123123-sdfsdf-lklsdf')
@@ -60,8 +60,8 @@ transactions = JSON.stringify({
 	]
 });
 
-console.log("\ncurl --request POST \ \n--url https://radians.nl/api/transactions \ \n" +
-	`--header 'content-type: application/json' \ \n--data '${transactions}'\n`);
+console.log("\ncurl --request POST --url https://radians.nl/api/transactions " +
+	`--header 'content-type: application/json' --data '${transactions}'`);
 
 transaction = RentalFinishBuilder
 	.rentalTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
@@ -85,5 +85,5 @@ transactions = JSON.stringify({
 	]
 });
 
-console.log("\ncurl --request POST \ \n--url https://radians.nl/api/transactions \ \n" +
-	`--header 'content-type: application/json' \ \n--data '${transactions}'\n`);
+console.log("\ncurl --request POST --url https://radians.nl/api/transactions " +
+	`--header 'content-type: application/json' --data '${transactions}'`);

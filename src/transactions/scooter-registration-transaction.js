@@ -25,7 +25,7 @@ class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 
 	serialize() {
 		const {data} = this;
-		const bytes = Buffer.from(data.asset.scooterId);
+		const bytes = Buffer.from(data.asset.scooterId, "utf8");
 		const buffer = new ByteBuffer(bytes.length, true);
 
 		buffer.writeUint8(bytes.length);
