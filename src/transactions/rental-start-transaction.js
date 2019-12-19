@@ -41,7 +41,7 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 		const buffer = new ByteBuffer(properties.join('').length, true);
 
 		for(const property of properties) {
-			let bytes = Buffer.from(property);
+			let bytes = Buffer.from(property, "utf8");
 
 			// TODO Can I always use writeUint8 here?
 			buffer.writeUint8(bytes.length);
