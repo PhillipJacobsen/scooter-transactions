@@ -104,15 +104,19 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	async applyToRecipient(transaction, walletManager) {
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
-		recipient.setAttribute(WalletAttributes.IS_RENTED, true);
-		walletManager.reindex(recipient);
+		if(this.hasAttribute(recipient, WalletAttributes.IS_RENTED)) {
+			recipient.setAttribute(WalletAttributes.IS_RENTED, true);
+			walletManager.reindex(recipient);
+		}
 	}
 
 	async revertForRecipient(transaction, walletManager) {
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
-		recipient.forgetAttribute(WalletAttributes.IS_RENTED);
-		walletManager.reindex(recipient);
+		if(this.hasAttribute(recipient, WalletAttributes.IS_RENTED)) {
+			recipient.forgetAttribute(WalletAttributes.IS_RENTED);
+			walletManager.reindex(recipient);
+		}
 	}
 }
 
