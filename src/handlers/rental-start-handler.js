@@ -32,7 +32,10 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByAddress(transaction.recipientId);
 
-				wallet.setAttribute(WalletAttributes.IS_RENTED, transaction.asset[WalletAttributes.IS_RENTED]);
+				console.log('--- rental start ---');
+				console.log(JSON.stringify(wallet));
+
+				wallet.setAttribute(WalletAttributes.IS_RENTED, true);
 				walletManager.reindex(wallet);
 			}
 		}
