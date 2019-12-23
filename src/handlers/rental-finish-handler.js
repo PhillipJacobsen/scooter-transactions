@@ -14,9 +14,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	walletAttributes() {
-		return [
-			WalletAttributes.IS_RENTED
-		];
+		return [];
 	}
 
 	isActivated() {
