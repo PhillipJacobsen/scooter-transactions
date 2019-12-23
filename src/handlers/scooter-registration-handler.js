@@ -32,7 +32,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByPublicKey(transaction.senderPublicKey);
 
-				wallet.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, transaction.asset);
+				wallet.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
 				walletManager.reindex(wallet);
 			}
 		}
@@ -95,7 +95,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.applyToSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		sender.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, transaction.data.asset);
+		sender.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
 		walletManager.reindex(sender);
 	}
 
