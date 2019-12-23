@@ -22,6 +22,18 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async bootstrap(connection, walletManager) {
+		const reader = await Transactions.TransactionReader.create(connection, this.getConstructor());
+
+		while(reader.hasNext()) {
+			const transactions = await reader.read();
+
+			for(const transaction of transactions) {
+				const wallet = walletManager.findByAddress(transaction.recipientId);
+
+				wallet.forgetAttribute(WalletAttributes.IS_RENTED);
+				walletManager.reindex(wallet);
+			}
+		}
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
