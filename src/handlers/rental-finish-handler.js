@@ -30,7 +30,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByAddress(transaction.recipientId);
 
-				wallet.forgetAttribute(WalletAttributes.IS_RENTED);
+				wallet.setAttribute(WalletAttributes.IS_RENTED, false);
 				walletManager.reindex(wallet);
 			}
 		}
@@ -43,11 +43,11 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
-		if(!recipient.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+		if(!recipient.getAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsNotRegisterdAsAScooter();
 		}
 
-		if(!recipient.hasAttribute(WalletAttributes.IS_RENTED)) {
+		if(!recipient.getAttribute(WalletAttributes.IS_RENTED)) {
 			throw new Errors.ScooterIsNotRented();
 		}
 
@@ -99,7 +99,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	async applyToRecipient(transaction, walletManager) {
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
-		recipient.forgetAttribute(WalletAttributes.IS_RENTED);
+		recipient.setAttribute(WalletAttributes.IS_RENTED, false);
 		walletManager.reindex(recipient);
 	}
 

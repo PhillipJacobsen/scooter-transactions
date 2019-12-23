@@ -43,7 +43,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			throw new Errors.IncompleteAssetError();
 		}
 
-		if(sender.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+		if(sender.getAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsAlreadyRegisterdAsAScooter();
 		}
 
@@ -98,7 +98,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.revertForSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		sender.forgetAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER);
+		sender.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, false);
 		walletManager.reindex(sender);
 	}
 
