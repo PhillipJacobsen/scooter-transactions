@@ -90,7 +90,6 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async applyToRecipient(transaction, walletManager) {
-		await super.applyToRecipient(transaction, walletManager);
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
 		recipient.forgetAttribute(WalletAttributes.IS_RENTED);
@@ -98,7 +97,6 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async revertForRecipient(transaction, walletManager) {
-		await super.revertForRecipient(transaction, walletManager);
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
 		recipient.setAttribute(WalletAttributes.IS_RENTED, true);
