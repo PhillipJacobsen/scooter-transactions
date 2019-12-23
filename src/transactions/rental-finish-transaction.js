@@ -30,6 +30,7 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 	serialize() {
 		const properties = [
 			this.data.amount.toString(),
+			this.data.vendorField,
 			this.data.recipientId,
 			this.data.asset.gps,
 			this.data.asset.rentalTransactionId,
@@ -51,6 +52,7 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 
 	deserialize(buffer) {
 		this.data.amount = Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()));
+		this.data.vendorField = buffer.readString(buffer.readUint8());
 		this.data.recipientId = buffer.readString(buffer.readUint8());
 		this.data.asset = {
 			gps: buffer.readString(buffer.readUint8()),
