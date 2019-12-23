@@ -24,7 +24,7 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	hasVendorField() {
-		return true;
+		return false;
 	}
 
 	serialize() {
@@ -35,7 +35,7 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 			this.data.asset.rentalTransactionId,
 			this.data.asset.optionalInteger ? this.data.asset.optionalInteger.toString() : '',
 			this.data.asset.optionalNumber ? this.data.asset.optionalNumber.toString() : '',
-			this.data.vendorField ? this.data.vendorField.toString() : ''
+			// this.data.vendorField ? this.data.vendorField.toString() : ''
 		];
 
 		const buffer = new ByteBuffer(properties.join('').length, true);
@@ -70,11 +70,11 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 			this.data.asset.optionalNumber = Number(optionalNumber);
 		}
 
-		const vendorField = buffer.readString(buffer.readUint8());
-
-		if(vendorField) {
-			this.data.optionalNumber = buffer.readString(buffer.readUint8());
-		}
+		// const vendorField = buffer.readString(buffer.readUint8());
+		//
+		// if(vendorField) {
+		// 	this.data.optionalNumber = buffer.readString(buffer.readUint8());
+		// }
 	}
 }
 

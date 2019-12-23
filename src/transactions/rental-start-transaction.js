@@ -24,7 +24,7 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	hasVendorField() {
-		return true;
+		return false;
 	}
 
 	serialize() {
@@ -43,10 +43,8 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 		for(const property of properties) {
 			let bytes = Buffer.from(property, "utf8");
 
-			// TODO Can I always use writeUint8 here?
 			buffer.writeUint8(bytes.length);
 			buffer.append(bytes);
-			// buffer.append(bytes, "hex");
 		}
 
 		return buffer;
