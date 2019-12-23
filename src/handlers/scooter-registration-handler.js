@@ -55,7 +55,11 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 	}
 
 	async canEnterTransactionPool(data, pool, processor) {
-		if(await this.typeFromSenderAlreadyInPool(data, pool, processor)) {
+		const error = await this.typeFromSenderAlreadyInPool(data, pool, processor);
+
+		if(error !== null) {
+			processor.pushError(data, error.type, error.message);
+
 			return false;
 		}
 
@@ -79,7 +83,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			return false;
 		}
 
-		return true;
+		return null;
 	}
 
 	async applyToSender(transaction, walletManager) {

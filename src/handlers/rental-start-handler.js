@@ -59,7 +59,11 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async canEnterTransactionPool(data, pool, processor) {
-		if(await this.typeFromSenderAlreadyInPool(data, pool, processor)) {
+		const error = await this.typeFromSenderAlreadyInPool(data, pool, processor);
+
+		if(error !== null) {
+			processor.pushError(data, error.type, error.message);
+
 			return false;
 		}
 
@@ -83,7 +87,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 			return false;
 		}
 
-		return true;
+		return null;
 	}
 
 	async applyToSender(transaction, walletManager) {
