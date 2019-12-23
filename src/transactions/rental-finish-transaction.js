@@ -28,14 +28,18 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	serialize() {
+		console.log('---- SER ----');
+		console.log(JSON.stringify(this));
+		console.log('---------------');
+
 		const properties = [
 			this.data.amount.toString(),
-			this.data.vendorField,
 			this.data.recipientId,
 			this.data.asset.gps,
 			this.data.asset.rentalTransactionId,
 			this.data.asset.optionalInteger ? this.data.asset.optionalInteger.toString() : '',
-			this.data.asset.optionalNumber ? this.data.asset.optionalNumber.toString() : ''
+			this.data.asset.optionalNumber ? this.data.asset.optionalNumber.toString() : '',
+			this.data.vendorField ? this.data.vendorField.toString() : ''
 		];
 
 		const buffer = new ByteBuffer(properties.join('').length, true);
@@ -51,8 +55,11 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	deserialize(buffer) {
+		console.log('---- DES ----');
+		console.log(JSON.stringify(this));
+		console.log('---------------');
+
 		this.data.amount = Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()));
-		this.data.vendorField = buffer.readString(buffer.readUint8());
 		this.data.recipientId = buffer.readString(buffer.readUint8());
 		this.data.asset = {
 			gps: buffer.readString(buffer.readUint8()),
@@ -69,6 +76,12 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 
 		if(optionalNumber) {
 			this.data.asset.optionalNumber = Number(optionalNumber);
+		}
+
+		const vendorField = buffer.readString(buffer.readUint8());
+
+		if(vendorField) {
+			this.data.optionalNumber = buffer.readString(buffer.readUint8());
 		}
 	}
 }
