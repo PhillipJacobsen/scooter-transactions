@@ -6,7 +6,7 @@ const Transactions = require('@arkecosystem/core-transactions');
 exports.plugin = {
 	pkg: require('../package.json'),
 	defaults: require('./defaults'),
-	alias: 'e-m-s-y:scooter-registration-transaction',
+	alias: 'e-m-s-y:scooter-transactions',
 	async register(container, options) {
 		const logger = container.resolvePlugin('logger');
 
