@@ -32,17 +32,10 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByPublicKey(transaction.senderPublicKey);
 
-				if(this.hasAttribute(wallet, WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
-					wallet.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
-					walletManager.reindex(wallet);
-				}
+				wallet.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
+				walletManager.reindex(wallet);
 			}
 		}
-	}
-
-	// TODO use recipient.hasAttribute() when this function does not throw an error anymore.
-	hasAttribute(wallet, key) {
-		return wallet.attributes[key] !== undefined;
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
@@ -50,7 +43,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			throw new Errors.IncompleteAssetError();
 		}
 
-		if(this.hasAttribute(sender, WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+		if(sender.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsAlreadyRegisterdAsAScooter();
 		}
 
@@ -97,20 +90,16 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		await super.applyToSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		if(this.hasAttribute(sender, WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
-			sender.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
-			walletManager.reindex(sender);
-		}
+		sender.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
+		walletManager.reindex(sender);
 	}
 
 	async revertForSender(transaction, walletManager) {
 		await super.revertForSender(transaction, walletManager);
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
-		if(this.hasAttribute(sender, WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
-			sender.forgetAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER);
-			walletManager.reindex(sender);
-		}
+		sender.forgetAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER);
+		walletManager.reindex(sender);
 	}
 
 	async applyToRecipient(transaction, walletManager) {

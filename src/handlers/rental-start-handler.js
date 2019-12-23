@@ -14,7 +14,9 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	walletAttributes() {
-		return [];
+		return [
+			WalletAttributes.IS_RENTED
+		];
 	}
 
 	isActivated() {
@@ -30,17 +32,10 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByAddress(transaction.recipientId);
 
-				if(this.hasAttribute(wallet, WalletAttributes.IS_RENTED)) {
-					wallet.setAttribute(WalletAttributes.IS_RENTED, true);
-					walletManager.reindex(wallet);
-				}
+				wallet.setAttribute(WalletAttributes.IS_RENTED, true);
+				walletManager.reindex(wallet);
 			}
 		}
-	}
-
-	// TODO use recipient.hasAttribute() when this function does not throw an error anymore.
-	hasAttribute(wallet, key) {
-		return wallet.attributes[key] !== undefined;
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
@@ -50,11 +45,11 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
-		if(!this.hasAttribute(recipient, WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+		if(!recipient.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsNotRegisterdAsAScooter();
 		}
 
-		if(this.hasAttribute(recipient, WalletAttributes.IS_RENTED)) {
+		if(recipient.hasAttribute(WalletAttributes.IS_RENTED)) {
 			throw new Errors.ScooterIsAlreadyRented();
 		}
 
@@ -106,19 +101,15 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	async applyToRecipient(transaction, walletManager) {
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
-		if(this.hasAttribute(recipient, WalletAttributes.IS_RENTED)) {
-			recipient.setAttribute(WalletAttributes.IS_RENTED, true);
-			walletManager.reindex(recipient);
-		}
+		recipient.setAttribute(WalletAttributes.IS_RENTED, true);
+		walletManager.reindex(recipient);
 	}
 
 	async revertForRecipient(transaction, walletManager) {
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
-		if(this.hasAttribute(recipient, WalletAttributes.IS_RENTED)) {
-			recipient.forgetAttribute(WalletAttributes.IS_RENTED);
-			walletManager.reindex(recipient);
-		}
+		recipient.forgetAttribute(WalletAttributes.IS_RENTED);
+		walletManager.reindex(recipient);
 	}
 }
 
