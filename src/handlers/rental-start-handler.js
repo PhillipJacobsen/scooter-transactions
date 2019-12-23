@@ -36,6 +36,11 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 		}
 	}
 
+	// TODO use recipient.hasAttribute() when this function does not throw an error anymore.
+	hasAttribute(wallet, key) {
+		return wallet.attributes[key] !== undefined;
+	}
+
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
 		if(!transaction.data.asset.hash || !transaction.data.asset.gps || !transaction.data.asset.rate) {
 			throw new Errors.IncompleteAssetError();
@@ -43,11 +48,11 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
-		if(!recipient.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+		if(!this.hasAttribute(recipient, WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsNotRegisterdAsAScooter();
 		}
 
-		if(recipient.hasAttribute(WalletAttributes.IS_RENTED)) {
+		if(this.hasAttribute(recipient, WalletAttributes.IS_RENTED)) {
 			throw new Errors.ScooterIsAlreadyRented();
 		}
 

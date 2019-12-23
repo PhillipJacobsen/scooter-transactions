@@ -38,12 +38,17 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 		}
 	}
 
+	// TODO use recipient.hasAttribute() when this function does not throw an error anymore.
+	hasAttribute(wallet, key) {
+		return wallet.attributes[key] !== undefined;
+	}
+
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
 		if(!transaction.data.asset.scooterId) {
 			throw new Errors.IncompleteAssetError();
 		}
 
-		if(sender.hasAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+		if(this.hasAttribute(sender, WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsAlreadyRegisterdAsAScooter();
 		}
 
