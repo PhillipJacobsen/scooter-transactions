@@ -5,6 +5,7 @@ const RentalFinishBuilder = require("./builders/rental-finish-builder");
 const ScooterRegistrationTransaction = require("./transactions/scooter-registration-transaction");
 const RentalStartTransaction = require("./transactions/rental-start-transaction");
 const RentalFinishTransaction = require("./transactions/rental-finish-transaction");
+const TransactionBuilder = Crypto.Transactions.BuilderFactory.transfer().instance();
 const config = require('./bridgechain-config');
 
 Crypto.Managers.configManager.setConfig(config);
@@ -40,7 +41,7 @@ transaction = RentalStartBuilder
 	.gps('110.1110101')
 	.rate('5')
 	.amount('1')
-	.vendorField('string max 255 length')
+	.vendorField('string max 512 length')
 	.optionalInteger(123456)
 	.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 	.optionalNumber(100.001111) // TODO 100.00 becomes 100 (loses .00 which might cause bugs when using for GPS coords).
@@ -67,9 +68,33 @@ transaction = RentalFinishBuilder
 	.rentalTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
 	.gps('110.1110101')
 	.amount('1')
-	.vendorField('string max 255 length')
+	.vendorField('string max 512 length')
 	.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 	.nonce('1')
+	.sign('jar width fee ostrich fantasy vehicle thank doctor teach family bottom trap');
+
+serialized = transaction.build().serialized.toString('hex');
+deserialized = Crypto.Transactions.Deserializer.deserialize(serialized);
+
+console.log(`\nTransaction is verified: ${transaction.verify()}`);
+console.log(`\nSerialized: ${serialized}`);
+console.log('\nDeserialized: %O', deserialized);
+
+transactions = JSON.stringify({
+	"transactions" : [
+		transaction.getStruct()
+	]
+});
+
+console.log("\ncurl --request POST --url https://radians.nl/api/transactions " +
+	`--header 'content-type: application/json' --data '${transactions}'`);
+
+transaction = TransactionBuilder
+	.amount(1)
+	.version(2)
+	.recipientId('TEBFiv6emzoY6i4znYGrFeWiKyTRimhNWe')
+	.vendorField('test')
+	.nonce('3')
 	.sign('jar width fee ostrich fantasy vehicle thank doctor teach family bottom trap');
 
 serialized = transaction.build().serialized.toString('hex');
