@@ -20,7 +20,7 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	static get defaultStaticFee() {
-		return 0;
+		return Crypto.Utils.BigNumber.make("10000000");
 	}
 
 	hasVendorField() {

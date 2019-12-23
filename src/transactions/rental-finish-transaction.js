@@ -20,7 +20,7 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	static get defaultStaticFee() {
-		return 0;
+		return Crypto.Utils.BigNumber.make("10000000");
 	}
 
 	hasVendorField() {
@@ -28,10 +28,6 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	serialize() {
-		console.log('---- SER ----');
-		console.log(JSON.stringify(this));
-		console.log('---------------');
-
 		const properties = [
 			this.data.amount.toString(),
 			this.data.recipientId,
@@ -55,10 +51,6 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	deserialize(buffer) {
-		console.log('---- DES ----');
-		console.log(JSON.stringify(this));
-		console.log('---------------');
-
 		this.data.amount = Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()));
 		this.data.recipientId = buffer.readString(buffer.readUint8());
 		this.data.asset = {
