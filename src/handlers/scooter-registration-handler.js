@@ -32,8 +32,10 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByPublicKey(transaction.senderPublicKey);
 
-				wallet.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
-				walletManager.reindex(wallet);
+				if(this.hasAttribute(wallet, WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+					wallet.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
+					walletManager.reindex(wallet);
+				}
 			}
 		}
 	}
