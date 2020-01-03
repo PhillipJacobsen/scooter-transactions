@@ -73,6 +73,7 @@ transaction = RentalFinishBuilder
 	.gpsLat('110.1110101')
 	.amount('1')
 	.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
+	.refundTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
 	.nonce(nonce)
 	.fee('10000000')
 	.sign(passphrase);

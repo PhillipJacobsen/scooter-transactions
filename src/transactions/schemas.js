@@ -80,6 +80,7 @@ module.exports = {
 					gpsLong: SchemaParameters.GPS_LONG,
 					gpsLat: SchemaParameters.GPS_LAT,
 					rentalStartTransactionId: SchemaParameters.TRANSACTION_ID,
+					refundTransactionId: { anyOf: [{ type: "null" }, SchemaParameters.TRANSACTION_ID] },
 					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
 					optionalNumber: SchemaParameters.NUMBER_PARAMETER
 				}
