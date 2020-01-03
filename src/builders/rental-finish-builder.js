@@ -12,14 +12,20 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 		this.data.asset = {};
 	}
 
-	rentalTransactionId(id) {
-		this.data.asset.rentalTransactionId = id;
+	rentalStartTransactionId(id) {
+		this.data.asset.rentalStartTransactionId = id;
 
 		return this.instance();
 	}
 
-	gps(coordinates) {
-		this.data.asset.gps = coordinates;
+	gpsLong(long) {
+		this.data.asset.gpsLong = long;
+
+		return this.instance();
+	}
+
+	gpsLat(lat) {
+		this.data.asset.gpsLat = lat;
 
 		return this.instance();
 	}

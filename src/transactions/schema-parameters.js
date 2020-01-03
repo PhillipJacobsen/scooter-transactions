@@ -12,7 +12,12 @@ module.exports = {
 		type: "number",
 		maxLength: 64
 	},
-	GPS: {
+	GPS_LONG: {
+		type: "string",
+		minLength: 1,
+		maxLength: 16
+	},
+	GPS_LAT: {
 		type: "string",
 		minLength: 1,
 		maxLength: 16

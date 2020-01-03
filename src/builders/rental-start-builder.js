@@ -18,8 +18,14 @@ class RentalStartBuilder extends Crypto.Transactions.TransactionBuilder {
 		return this.instance();
 	}
 
-	gps(coordinates) {
-		this.data.asset.gps = coordinates;
+	gpsLong(long) {
+		this.data.asset.gpsLong = long;
+
+		return this.instance();
+	}
+
+	gpsLat(lat) {
+		this.data.asset.gpsLat = lat;
 
 		return this.instance();
 	}

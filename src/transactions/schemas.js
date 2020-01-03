@@ -40,14 +40,15 @@ module.exports = {
 			recipientId: {$ref: "address"},
 			asset: {
 				type: "object",
-				required: ["hash", "gps", "rate"],
+				required: ["hash", "gpsLong", "gpsLat", "rate"],
 				properties: {
 					hash: {
 						type: "string",
 						minLength: 1,
 						maxLength: 64
 					},
-					gps: SchemaParameters.GPS,
+					gpsLong: SchemaParameters.GPS_LONG,
+					gpsLat: SchemaParameters.GPS_LAT,
 					rate: {
 						bignumber: {
 							minimum: 1
@@ -72,10 +73,11 @@ module.exports = {
 			recipientId: {$ref: "address"},
 			asset: {
 				type: "object",
-				required: ["gps"],
+				required: ["gpsLong", "gpsLat", "rentalStartTransactionId"],
 				properties: {
-					gps: SchemaParameters.GPS,
-					rentalTransactionId: SchemaParameters.TRANSACTION_ID,
+					gpsLong: SchemaParameters.GPS_LONG,
+					gpsLat: SchemaParameters.GPS_LAT,
+					rentalStartTransactionId: SchemaParameters.TRANSACTION_ID,
 					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
 					optionalNumber: SchemaParameters.NUMBER_PARAMETER
 				}
