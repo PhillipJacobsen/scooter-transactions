@@ -6,11 +6,13 @@ const ScooterRegistrationTransaction = require("./transactions/scooter-registrat
 const RentalStartTransaction = require("./transactions/rental-start-transaction");
 const RentalFinishTransaction = require("./transactions/rental-finish-transaction");
 const TransactionBuilder = Crypto.Transactions.BuilderFactory.transfer().instance();
+const childProcess = require('child_process');
 const config = require("./bridgechain-config");
 const args = require("./args");
 const nonce = args.nonce || '1';
 const passphrase = 'jar width fee ostrich fantasy vehicle thank doctor teach family bottom trap';
 
+console.log('\n---------- ARGS ----------');
 console.log(args);
 
 Crypto.Managers.configManager.setConfig(config);
@@ -36,7 +38,7 @@ if(args.txt === 'sr') {
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 		// .optionalNumber(100.001111) // TODO 100.00 becomes 100 (loses .00 which might cause bugs when using for GPS_LONG coords).
 		.nonce(nonce)
-		.vendorField('test')
+		.vendorField(args.vf)
 		.sign(passphrase));
 } else if(args.txt === 'rf') {
 	transactions.push(RentalFinishBuilder.rentalStartTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
@@ -46,14 +48,14 @@ if(args.txt === 'sr') {
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 		.refundTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
 		.nonce(nonce)
-		.vendorField(':)')
+		.vendorField(args.vf)
 		.fee('10000000')
 		.sign(passphrase));
 } else if(args.txt === 't') {
 	transactions.push(TransactionBuilder.amount(1)
 		.version(2)
 		.recipientId('TEBFiv6emzoY6i4znYGrFeWiKyTRimhNWe')
-		.vendorField('test')
+		.vendorField(args.vf)
 		.nonce(nonce)
 		.sign(passphrase));
 }
@@ -75,5 +77,11 @@ for(const transaction of transactions) {
 	}
 }
 
-console.log("\ncurl --request POST --url https://radians.nl/api/transactions " +
-	`--header 'content-type: application/json' --data '${JSON.stringify(payload)}'`);
+console.log('\n---------- COMMAND ----------');
+const command = "curl --request POST --url https://radians.nl/api/transactions " +
+	`--header 'content-type: application/json' --data '${JSON.stringify(payload)}'`;
+console.log(command);
+console.log('\n---------- RESPONSE ----------');
+console.log(childProcess.execSync(command).toString('UTF8'));
+
+
