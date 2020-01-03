@@ -44,9 +44,9 @@ transaction = RentalStartBuilder
 	.gpsLat('110.1110101')
 	.rate('5')
 	.amount('1')
-	.optionalInteger(123456)
+	// .optionalInteger(123456)
 	.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
-	.optionalNumber(100.001111) // TODO 100.00 becomes 100 (loses .00 which might cause bugs when using for GPS_LONG coords).
+	// .optionalNumber(100.001111) // TODO 100.00 becomes 100 (loses .00 which might cause bugs when using for GPS_LONG coords).
 	.nonce(nonce)
 	.vendorField('test')
 	.sign(passphrase);

@@ -38,7 +38,7 @@ module.exports = {
 				const: Types.TYPE_GROUP
 			},
 			recipientId: {$ref: "address"},
-			vendorField: { anyOf: [{ type: "null" }, { type: "string", format: "vendorField" }] },
+			vendorField: SchemaParameters.VENDORFIELD,
 			asset: {
 				type: "object",
 				required: ["hash", "gpsLong", "gpsLat", "rate"],
@@ -72,7 +72,7 @@ module.exports = {
 				const: Types.TYPE_GROUP
 			},
 			recipientId: {$ref: "address"},
-			vendorField: { anyOf: [{ type: "null" }, { type: "string", format: "vendorField" }] },
+			vendorField: SchemaParameters.VENDORFIELD,
 			asset: {
 				type: "object",
 				required: ["gpsLong", "gpsLat", "rentalStartTransactionId"],
@@ -80,7 +80,7 @@ module.exports = {
 					gpsLong: SchemaParameters.GPS_LONG,
 					gpsLat: SchemaParameters.GPS_LAT,
 					rentalStartTransactionId: SchemaParameters.TRANSACTION_ID,
-					refundTransactionId: { anyOf: [{ type: "null" }, SchemaParameters.TRANSACTION_ID] },
+					refundTransactionId: SchemaParameters.REFUND_TRANSACTION_ID,
 					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
 					optionalNumber: SchemaParameters.NUMBER_PARAMETER
 				}

@@ -1,16 +1,14 @@
-module.exports = {
+const parameters = {
 	SCOOTER_ID: {
 		type: "string",
 		minLength: 10,
 		maxLength: 10
 	},
 	INTEGER_PARAMETER: {
-		type: "integer",
-		maxLength: 64
+		anyOf: [{type: "null"}, {type: "integer", maxLength: 64}]
 	},
 	NUMBER_PARAMETER: {
-		type: "number",
-		maxLength: 64
+		anyOf: [{type: "null"}, {type: "number", maxLength: 64}]
 	},
 	GPS_LONG: {
 		type: "string",
@@ -24,5 +22,14 @@ module.exports = {
 	},
 	TRANSACTION_ID: {
 		$ref: "transactionId"
+	},
+	VENDORFIELD: {
+		anyOf: [{type: "null"}, {type: "string", format: "vendorField"}]
 	}
 };
+
+parameters.REFUND_TRANSACTION_ID = {
+	anyOf: [{type: "null"}, parameters.TRANSACTION_ID]
+};
+
+module.exports = parameters;
