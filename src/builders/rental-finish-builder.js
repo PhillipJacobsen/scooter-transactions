@@ -42,8 +42,8 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 		return this.instance();
 	}
 
-	refundTransactionId(id) {
-		this.data.asset.refundTransactionId = id;
+	containsRefund(bool) {
+		this.data.asset.containsRefund = bool;
 
 		return this.instance();
 	}

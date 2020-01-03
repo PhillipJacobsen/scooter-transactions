@@ -36,7 +36,7 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 			this.data.asset.gpsFinishLong,
 			this.data.asset.gpsFinishLat,
 			this.data.asset.rentalStartTransactionId,
-			this.data.asset.refundTransactionId ? this.data.asset.refundTransactionId : '',
+			this.data.asset.containsRefund.toString(),
 			this.data.asset.rideDuration ? this.data.asset.rideDuration.toString() : '',
 			this.data.asset.optionalInteger ? this.data.asset.optionalInteger.toString() : '',
 			this.data.asset.optionalNumber ? this.data.asset.optionalNumber.toString() : '',
@@ -63,13 +63,8 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 			gpsFinishLong: buffer.readString(buffer.readUint8()),
 			gpsFinishLat: buffer.readString(buffer.readUint8()),
 			rentalStartTransactionId: buffer.readString(buffer.readUint8()),
+			containsRefund: Boolean(buffer.readString(buffer.readUint8()))
 		};
-
-		const refundTransactionId = buffer.readString(buffer.readUint8());
-
-		if(refundTransactionId) {
-			this.data.asset.refundTransactionId = refundTransactionId;
-		}
 
 		const rideDuration = buffer.readString(buffer.readUint8());
 

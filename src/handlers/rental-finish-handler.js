@@ -43,21 +43,22 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
 		if(!transaction.data.asset.gpsStartLong || !transaction.data.asset.gpsStartLat
 			|| !transaction.data.asset.gpsFinishLong || !transaction.data.asset.gpsFinishLat
-			|| !transaction.data.asset.rentalStartTransactionId || !transaction.data.asset.rideDuration) {
+			|| !transaction.data.asset.rideDuration || !transaction.data.asset.rentalStartTransactionId
+			|| !transaction.data.asset.containsRefund) {
 			throw new Errors.IncompleteAssetError();
 		}
 
 		await super.throwIfCannotBeApplied(transaction, sender, walletManager);
 
-		const recipient = walletManager.findByAddress(transaction.data.recipientId);
-
-		if(!recipient.getAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
+		if(!sender.getAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
 			throw new Errors.WalletIsNotRegisterdAsAScooter();
 		}
 
-		if(!recipient.getAttribute(WalletAttributes.IS_RENTED)) {
+		if(!sender.getAttribute(WalletAttributes.IS_RENTED)) {
 			throw new Errors.ScooterIsNotRented();
 		}
+
+		// TODO get tx by transaction.asset.rentalStartTransactionId and validate if scooterId matches.
 	}
 
 	emitEvents(transaction, emitter) {
@@ -78,7 +79,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_CONFLICT', `Scooter with address "${data.recipientId}" is already rented.`);
+			processor.pushError(data, 'ERR_CONFLICT', `Scooter with public key "${data.senderPublicKey}" is already rented.`);
 
 			return false;
 		}
@@ -88,7 +89,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_PENDING', `Rental finish request for scooter with address "${data.recipientId}" is already in the transaction pool.`);
+			processor.pushError(data, 'ERR_PENDING', `Rental finish request for scooter with public key "${data.senderPublicKey}" is already in the transaction pool.`);
 
 			return false;
 		}
@@ -96,18 +97,28 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		return null;
 	}
 
-	async applyToRecipient(transaction, walletManager) {
-		const recipient = walletManager.findByAddress(transaction.data.recipientId);
+	async applyToSender(transaction, walletManager) {
+		await super.applyToSender(transaction, walletManager);
 
-		recipient.setAttribute(WalletAttributes.IS_RENTED, false);
-		walletManager.reindex(recipient);
+		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
+
+		sender.setAttribute(WalletAttributes.IS_RENTED, false);
+		walletManager.reindex(sender);
+	}
+
+	async revertForSender(transaction, walletManager) {
+		await super.revertForSender(transaction, walletManager);
+
+		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
+
+		sender.setAttribute(WalletAttributes.IS_RENTED, true);
+		walletManager.reindex(sender);
+	}
+
+	async applyToRecipient(transaction, walletManager) {
 	}
 
 	async revertForRecipient(transaction, walletManager) {
-		const recipient = walletManager.findByAddress(transaction.data.recipientId);
-
-		recipient.setAttribute(WalletAttributes.IS_RENTED, true);
-		walletManager.reindex(recipient);
 	}
 }
 

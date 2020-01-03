@@ -82,7 +82,7 @@ module.exports = {
 					gpsFinishLong: SchemaParameters.GPS_LONG,
 					gpsFinishLat: SchemaParameters.GPS_LAT,
 					rentalStartTransactionId: SchemaParameters.TRANSACTION_ID,
-					refundTransactionId: SchemaParameters.REFUND_TRANSACTION_ID,
+					containsRefund: SchemaParameters.CONTAINS_REFUND,
 					rideDuration: SchemaParameters.RIDE_DURATION_IN_MINUTES,
 					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
 					optionalNumber: SchemaParameters.NUMBER_PARAMETER

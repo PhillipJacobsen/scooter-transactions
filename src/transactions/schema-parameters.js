@@ -1,4 +1,4 @@
-const parameters = {
+module.exports = {
 	SCOOTER_ID: {
 		type: "string",
 		minLength: 10,
@@ -29,11 +29,8 @@ const parameters = {
 	RIDE_DURATION_IN_MINUTES: {
 		type: "integer",
 		maxLength: 12
+	},
+	CONTAINS_REFUND: {
+		type: "boolean"
 	}
 };
-
-parameters.REFUND_TRANSACTION_ID = {
-	anyOf: [{type: "null"}, parameters.TRANSACTION_ID]
-};
-
-module.exports = parameters;
