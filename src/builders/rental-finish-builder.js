@@ -36,6 +36,12 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 		return this.instance();
 	}
 
+	rideDuration(minutes) {
+		this.data.asset.rideDuration = minutes;
+
+		return this.instance();
+	}
+
 	optionalInteger(value) {
 		this.data.asset.optionalInteger = value;
 

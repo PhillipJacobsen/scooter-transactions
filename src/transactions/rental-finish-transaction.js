@@ -35,6 +35,7 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 			this.data.asset.gpsLat,
 			this.data.asset.rentalStartTransactionId,
 			this.data.asset.refundTransactionId ? this.data.asset.refundTransactionId : '',
+			this.data.asset.rideDuration ? this.data.asset.rideDuration.toString() : '',
 			this.data.asset.optionalInteger ? this.data.asset.optionalInteger.toString() : '',
 			this.data.asset.optionalNumber ? this.data.asset.optionalNumber.toString() : '',
 		];
@@ -64,6 +65,12 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 
 		if(refundTransactionId) {
 			this.data.asset.refundTransactionId = refundTransactionId;
+		}
+
+		const rideDuration = buffer.readString(buffer.readUint8());
+
+		if(rideDuration) {
+			this.data.asset.rideDuration = Number(rideDuration);
 		}
 
 		const optionalInteger = buffer.readString(buffer.readUint8());

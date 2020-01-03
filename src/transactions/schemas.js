@@ -75,12 +75,13 @@ module.exports = {
 			vendorField: SchemaParameters.VENDORFIELD,
 			asset: {
 				type: "object",
-				required: ["gpsLong", "gpsLat", "rentalStartTransactionId"],
+				required: ["gpsLong", "gpsLat", "rentalStartTransactionId", "rideDuration"],
 				properties: {
 					gpsLong: SchemaParameters.GPS_LONG,
 					gpsLat: SchemaParameters.GPS_LAT,
 					rentalStartTransactionId: SchemaParameters.TRANSACTION_ID,
 					refundTransactionId: SchemaParameters.REFUND_TRANSACTION_ID,
+					rideDuration: SchemaParameters.RIDE_DURATION_IN_MINUTES,
 					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
 					optionalNumber: SchemaParameters.NUMBER_PARAMETER
 				}

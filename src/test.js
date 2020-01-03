@@ -47,6 +47,7 @@ if(args.txt === 'sr') {
 		.amount('1')
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 		.refundTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
+		.rideDuration(60)
 		.nonce(nonce)
 		.vendorField(args.vf)
 		.fee('10000000')
@@ -81,7 +82,10 @@ console.log('\n---------- COMMAND ----------');
 const command = "curl --request POST --url https://radians.nl/api/transactions " +
 	`--header 'content-type: application/json' --data '${JSON.stringify(payload)}'`;
 console.log(command);
-console.log('\n---------- RESPONSE ----------');
-console.log(childProcess.execSync(command).toString('UTF8'));
+
+if(!args.d) {
+	console.log('\n---------- RESPONSE ----------');
+	console.log(childProcess.execSync(command).toString('UTF8'));
+}
 
 
