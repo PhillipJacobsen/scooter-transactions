@@ -30,9 +30,6 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 			for(const transaction of transactions) {
 				const wallet = walletManager.findByAddress(transaction.recipientId);
 
-				console.log('--- rental finish ---');
-				console.log(JSON.stringify(wallet));
-
 				wallet.setAttribute(WalletAttributes.IS_RENTED, false);
 				walletManager.reindex(wallet);
 			}
