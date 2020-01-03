@@ -90,12 +90,6 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		return null;
 	}
 
-	async applyToSender(transaction, walletManager) {
-	}
-
-	async revertForSender(transaction, walletManager) {
-	}
-
 	async applyToRecipient(transaction, walletManager) {
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 

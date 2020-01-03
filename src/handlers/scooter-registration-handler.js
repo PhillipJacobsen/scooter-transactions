@@ -88,6 +88,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 
 	async applyToSender(transaction, walletManager) {
 		await super.applyToSender(transaction, walletManager);
+
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
 		sender.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
@@ -96,6 +97,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 
 	async revertForSender(transaction, walletManager) {
 		await super.revertForSender(transaction, walletManager);
+
 		const sender = walletManager.findByPublicKey(transaction.data.senderPublicKey);
 
 		sender.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, false);

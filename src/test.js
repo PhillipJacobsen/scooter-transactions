@@ -7,7 +7,7 @@ const RentalStartTransaction = require("./transactions/rental-start-transaction"
 const RentalFinishTransaction = require("./transactions/rental-finish-transaction");
 const TransactionBuilder = Crypto.Transactions.BuilderFactory.transfer().instance();
 const config = require('./bridgechain-config');
-const nonce = '2';
+const nonce = '4';
 const passphrase = 'jar width fee ostrich fantasy vehicle thank doctor teach family bottom trap';
 
 Crypto.Managers.configManager.setConfig(config);
