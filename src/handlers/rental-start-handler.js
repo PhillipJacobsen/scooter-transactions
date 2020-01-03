@@ -39,7 +39,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
-		if(!transaction.data.asset.hash || !transaction.data.asset.gps || !transaction.data.asset.rate) {
+		if(!transaction.data.asset.hash || !transaction.data.asset.gpsLong || !transaction.data.asset.gpsLat || !transaction.data.asset.rate) {
 			throw new Errors.IncompleteAssetError();
 		}
 

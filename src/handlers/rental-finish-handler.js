@@ -37,7 +37,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
-		if(!transaction.data.asset.gps) {
+		if(!transaction.data.asset.gpsLong || !transaction.data.asset.gpsLat || !transaction.data.asset.rentalStartTransactionId) {
 			throw new Errors.IncompleteAssetError();
 		}
 
@@ -68,7 +68,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		}
 
 		let transactions = processor.getTransactions().filter((transaction) => {
-			return transaction.type === this.getConstructor().type && transaction.asset.rentalTransactionId === data.asset.rentalTransactionId;
+			return transaction.type === this.getConstructor().type && transaction.asset.rentalStartTransactionId === data.asset.rentalStartTransactionId;
 		});
 
 		if(transactions.length > 1) {
@@ -78,7 +78,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		}
 
 		transactions = Array.from(await pool.getTransactionsByType(this.getConstructor().type)).filter((transaction) => {
-			return transaction.data.asset.rentalTransactionId === data.asset.rentalTransactionId;
+			return transaction.data.asset.rentalStartTransactionId === data.asset.rentalStartTransactionId;
 		});
 
 		if(transactions.length > 1) {
