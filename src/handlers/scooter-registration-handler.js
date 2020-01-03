@@ -30,7 +30,7 @@ class ScooterRegistrationHandler extends Transactions.Handlers.TransactionHandle
 			const transactions = await reader.read();
 
 			for(const transaction of transactions) {
-				const wallet = walletManager.findByAddress(transaction.recipientId);
+				const wallet = walletManager.findByPublicKey(transaction.senderPublicKey);
 
 				wallet.setAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER, true);
 				walletManager.reindex(wallet);
