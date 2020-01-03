@@ -27,7 +27,8 @@ const parameters = {
 		anyOf: [{type: "null"}, {type: "string", format: "vendorField"}]
 	},
 	RIDE_DURATION_IN_MINUTES: {
-		anyOf: [{type: "null"}, {type: "integer", maxLength: 12}]
+		type: "integer",
+		maxLength: 12
 	}
 };
 
