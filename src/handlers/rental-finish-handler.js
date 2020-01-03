@@ -41,6 +41,8 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 			throw new Errors.IncompleteAssetError();
 		}
 
+		await super.throwIfCannotBeApplied(transaction, sender, walletManager);
+
 		const recipient = walletManager.findByAddress(transaction.data.recipientId);
 
 		if(!recipient.getAttribute(WalletAttributes.IS_REGISTERED_AS_SCOOTER)) {
@@ -50,8 +52,6 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		if(!recipient.getAttribute(WalletAttributes.IS_RENTED)) {
 			throw new Errors.ScooterIsNotRented();
 		}
-
-		await super.throwIfCannotBeApplied(transaction, sender, walletManager);
 	}
 
 	emitEvents(transaction, emitter) {
@@ -72,7 +72,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_CONFLICT', `Scooter with address "${data.asset.recipientId}" is already rented.`);
+			processor.pushError(data, 'ERR_CONFLICT', `Scooter with address "${data.recipientId}" is already rented.`);
 
 			return false;
 		}
@@ -82,7 +82,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_PENDING', `Rental finish request for scooter with address "${data.asset.recipientId}" is already in the transaction pool.`);
+			processor.pushError(data, 'ERR_PENDING', `Rental finish request for scooter with address "${data.recipientId}" is already in the transaction pool.`);
 
 			return false;
 		}
