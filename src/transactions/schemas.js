@@ -72,6 +72,7 @@ module.exports = {
 				const: Types.TYPE_GROUP
 			},
 			recipientId: {$ref: "address"},
+			vendorField: { anyOf: [{ type: "null" }, { type: "string", format: "vendorField" }] },
 			asset: {
 				type: "object",
 				required: ["gpsLong", "gpsLat", "rentalStartTransactionId"],
