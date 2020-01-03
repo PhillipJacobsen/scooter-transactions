@@ -23,6 +23,10 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 		return true;
 	}
 
+	hasVendorField() {
+		return true;
+	}
+
 	async bootstrap(connection, walletManager) {
 		const reader = await Transactions.TransactionReader.create(connection, this.getConstructor());
 

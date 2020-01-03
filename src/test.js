@@ -7,7 +7,7 @@ const RentalStartTransaction = require("./transactions/rental-start-transaction"
 const RentalFinishTransaction = require("./transactions/rental-finish-transaction");
 const TransactionBuilder = Crypto.Transactions.BuilderFactory.transfer().instance();
 const config = require('./bridgechain-config');
-const nonce = '4';
+const nonce = '6';
 const passphrase = 'jar width fee ostrich fantasy vehicle thank doctor teach family bottom trap';
 
 Crypto.Managers.configManager.setConfig(config);
@@ -48,6 +48,7 @@ transaction = RentalStartBuilder
 	.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 	.optionalNumber(100.001111) // TODO 100.00 becomes 100 (loses .00 which might cause bugs when using for GPS_LONG coords).
 	.nonce(nonce)
+	.vendorField('test')
 	.sign(passphrase);
 
 serialized = transaction.build().serialized.toString('hex');

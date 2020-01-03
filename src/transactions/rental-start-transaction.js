@@ -24,7 +24,7 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	hasVendorField() {
-		return false;
+		return true;
 	}
 
 	serialize() {
