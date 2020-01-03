@@ -31,8 +31,10 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 		const properties = [
 			this.data.amount.toString(),
 			this.data.recipientId,
-			this.data.asset.gpsLong,
-			this.data.asset.gpsLat,
+			this.data.asset.gpsStartLong,
+			this.data.asset.gpsStartLat,
+			this.data.asset.gpsFinishLong,
+			this.data.asset.gpsFinishLat,
 			this.data.asset.rentalStartTransactionId,
 			this.data.asset.refundTransactionId ? this.data.asset.refundTransactionId : '',
 			this.data.asset.rideDuration ? this.data.asset.rideDuration.toString() : '',
@@ -56,8 +58,10 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 		this.data.amount = Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()));
 		this.data.recipientId = buffer.readString(buffer.readUint8());
 		this.data.asset = {
-			gpsLong: buffer.readString(buffer.readUint8()),
-			gpsLat: buffer.readString(buffer.readUint8()),
+			gpsStartLong: buffer.readString(buffer.readUint8()),
+			gpsStartLat: buffer.readString(buffer.readUint8()),
+			gpsFinishLong: buffer.readString(buffer.readUint8()),
+			gpsFinishLat: buffer.readString(buffer.readUint8()),
 			rentalStartTransactionId: buffer.readString(buffer.readUint8()),
 		};
 

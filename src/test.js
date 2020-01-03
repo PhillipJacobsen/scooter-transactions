@@ -42,8 +42,10 @@ if(args.txt === 'sr') {
 		.sign(passphrase));
 } else if(args.txt === 'rf') {
 	transactions.push(RentalFinishBuilder.rentalStartTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
-		.gpsLong('110.1110101')
-		.gpsLat('110.1110101')
+		.gpsStartLong('110.1110101')
+		.gpsStartLat('110.1110101')
+		.gpsFinishLong('110.1110101')
+		.gpsFinishLat('110.1110101')
 		.amount('1')
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 		.refundTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')

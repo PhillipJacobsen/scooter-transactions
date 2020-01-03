@@ -41,7 +41,9 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
-		if(!transaction.data.asset.gpsLong || !transaction.data.asset.gpsLat || !transaction.data.asset.rentalStartTransactionId) {
+		if(!transaction.data.asset.gpsStartLong || !transaction.data.asset.gpsStartLat
+			|| !transaction.data.asset.gpsFinishLong || !transaction.data.asset.gpsFinishLat
+			|| !transaction.data.asset.rentalStartTransactionId || !transaction.data.asset.rideDuration) {
 			throw new Errors.IncompleteAssetError();
 		}
 
