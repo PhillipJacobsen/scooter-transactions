@@ -59,8 +59,6 @@ module.exports = {
 							minimum: 1
 						}
 					},
-					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
-					optionalNumber: SchemaParameters.NUMBER_PARAMETER
 				}
 			}
 		}
@@ -90,8 +88,6 @@ module.exports = {
 					rentalStartTransactionId: SchemaParameters.TRANSACTION_ID,
 					containsRefund: SchemaParameters.CONTAINS_REFUND,
 					rideDuration: SchemaParameters.RIDE_DURATION_IN_MINUTES,
-					optionalInteger: SchemaParameters.INTEGER_PARAMETER,
-					optionalNumber: SchemaParameters.NUMBER_PARAMETER
 				}
 			}
 		}
