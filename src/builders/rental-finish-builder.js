@@ -20,9 +20,15 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 		return this.instance();
 	}
 
+	// TODO create abstract class and move this function up.
 	gps(timestamp, lat, long) {
+		const date = new Date(timestamp);
+
 		this.data.asset.gps.push({
-			timestamp: timestamp,
+			timestamp: {
+				epoch: Math.floor(date.getTime() / 1000),
+				human: date.toJSON()
+			},
 			lat: lat,
 			long: long
 		});

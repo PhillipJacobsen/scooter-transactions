@@ -15,6 +15,8 @@ const passphrase = 'jar width fee ostrich fantasy vehicle thank doctor teach fam
 console.log('\n---------- ARGS ----------');
 console.log(args);
 
+console.log((new Date()).toJSON());
+
 Crypto.Managers.configManager.setConfig(config);
 Crypto.Managers.configManager.setHeight(1850);
 

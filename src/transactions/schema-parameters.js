@@ -16,8 +16,18 @@ const Schemas = {
 		maxLength: 16
 	},
 	TIMESTAMP: {
-		type: "integer",
-		minimum: 0
+		type: "object",
+		required: ["epoch", "human"],
+		properties: {
+			epoch: {
+				type: "integer",
+				minimum: 0
+			},
+			human: {
+				type: "string",
+				minimum: 0
+			}
+		}
 	},
 	TRANSACTION_ID: {
 		$ref: "transactionId"
