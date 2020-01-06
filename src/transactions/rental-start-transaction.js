@@ -32,11 +32,8 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 			this.data.amount.toString(),
 			this.data.recipientId,
 			this.data.asset.hash,
-			this.data.asset.gpsLong,
-			this.data.asset.gpsLat,
+			JSON.stringify(this.data.asset.gps),
 			this.data.asset.rate.toString(),
-			this.data.asset.optionalInteger ? this.data.asset.optionalInteger.toString() : '',
-			this.data.asset.optionalNumber ? this.data.asset.optionalNumber.toString() : ''
 		];
 
 		const buffer = new ByteBuffer(properties.join('').length, true);
@@ -56,22 +53,9 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 		this.data.recipientId = buffer.readString(buffer.readUint8());
 		this.data.asset = {
 			hash: buffer.readString(buffer.readUint8()),
-			gpsLong: buffer.readString(buffer.readUint8()),
-			gpsLat: buffer.readString(buffer.readUint8()),
+			gps: JSON.parse(buffer.readString(buffer.readUint8())),
 			rate: Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()))
 		};
-
-		const optionalInteger = buffer.readString(buffer.readUint8());
-
-		if(optionalInteger) {
-			this.data.asset.optionalInteger = Number(optionalInteger);
-		}
-
-		const optionalNumber = buffer.readString(buffer.readUint8());
-
-		if(optionalNumber) {
-			this.data.asset.optionalNumber = Number(optionalNumber);
-		}
 	}
 }
 

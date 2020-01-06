@@ -30,23 +30,18 @@ if(args.txt === 'sr') {
 		.sign(passphrase));
 } else if(args.txt === 'rs') {
 	transactions.push(RentalStartBuilder.hash('asabasdb-123123-sdfsdf-lklsdf')
-		.gpsLong('110.1110101')
-		.gpsLat('110.1110101')
+		.gps(Date.now(), '10.1111111', '-20.2222222')
 		.rate('5')
 		.amount('1')
-		// .optionalInteger(123456)
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
-		// .optionalNumber(100.001111) // TODO 100.00 becomes 100 (loses .00 which might cause bugs when using for GPS_LONG coords).
 		.nonce(nonce)
 		.vendorField(args.vf)
 		.sign(passphrase));
 } else if(args.txt === 'rf') {
 	transactions.push(RentalFinishBuilder.rentalStartTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
-		.gpsStartLong('110.1110101')
-		.gpsStartLat('110.1110101')
-		.gpsFinishLong('110.1110101')
-		.gpsFinishLat('110.1110101')
-		.amount('1')
+		.gps(Date.now(), '10.1111111', '-20.2222222')
+		.gps(Date.now() + 11111, '15.1111111', '-25.2222222')
+		.amount('3333')
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 		.containsRefund(true)
 		.rideDuration(60)

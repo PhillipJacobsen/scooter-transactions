@@ -1,4 +1,4 @@
-module.exports = {
+const Schemas = {
 	SCOOTER_ID: {
 		type: "string",
 		minLength: 10,
@@ -10,15 +10,14 @@ module.exports = {
 	NUMBER_PARAMETER: {
 		anyOf: [{type: "null"}, {type: "number", maxLength: 64}]
 	},
-	GPS_LONG: {
+	GPS_COORDINATE: {
 		type: "string",
 		minLength: 1,
 		maxLength: 16
 	},
-	GPS_LAT: {
-		type: "string",
-		minLength: 1,
-		maxLength: 16
+	TIMESTAMP: {
+		type: "integer",
+		minimum: 0
 	},
 	TRANSACTION_ID: {
 		$ref: "transactionId"
@@ -32,5 +31,18 @@ module.exports = {
 	},
 	CONTAINS_REFUND: {
 		type: "boolean"
+	},
+	GPS_POINT: {
+		type: "object",
+		required: ["timestamp", "long", "lat"],
+		properties: undefined
 	}
 };
+
+Schemas.GPS_POINT.properties = {
+	timestamp: Schemas.TIMESTAMP,
+	long: Schemas.GPS_COORDINATE,
+	lat: Schemas.GPS_COORDINATE
+};
+
+module.exports = Schemas;

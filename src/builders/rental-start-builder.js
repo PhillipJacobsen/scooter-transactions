@@ -9,7 +9,9 @@ class RentalStartBuilder extends Crypto.Transactions.TransactionBuilder {
 		this.data.version = 2;
 		this.data.fee = RentalStartTransaction.defaultStaticFee;
 		this.data.amount = Crypto.Utils.BigNumber.ZERO;
-		this.data.asset = {};
+		this.data.asset = {
+			gps: []
+		};
 	}
 
 	hash(value) {
@@ -18,32 +20,18 @@ class RentalStartBuilder extends Crypto.Transactions.TransactionBuilder {
 		return this.instance();
 	}
 
-	gpsLong(long) {
-		this.data.asset.gpsLong = long;
-
-		return this.instance();
-	}
-
-	gpsLat(lat) {
-		this.data.asset.gpsLat = lat;
+	gps(timestamp, lat, long) {
+		this.data.asset.gps.push({
+			timestamp: timestamp,
+			lat: lat,
+			long: long
+		});
 
 		return this.instance();
 	}
 
 	rate(amount) {
 		this.data.asset.rate = Crypto.Utils.BigNumber.make(amount);
-
-		return this.instance();
-	}
-
-	optionalInteger(value) {
-		this.data.asset.optionalInteger = value;
-
-		return this.instance();
-	}
-
-	optionalNumber(value) {
-		this.data.asset.optionalNumber = value;
 
 		return this.instance();
 	}

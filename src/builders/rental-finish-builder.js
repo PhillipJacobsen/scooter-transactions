@@ -9,7 +9,9 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 		this.data.version = 2;
 		this.data.fee = RentalFinishTransaction.defaultStaticFee;
 		this.data.amount = Crypto.Utils.BigNumber.ZERO;
-		this.data.asset = {};
+		this.data.asset = {
+			gps: []
+		};
 	}
 
 	rentalStartTransactionId(id) {
@@ -18,26 +20,12 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 		return this.instance();
 	}
 
-	gpsStartLong(long) {
-		this.data.asset.gpsStartLong = long;
-
-		return this.instance();
-	}
-
-	gpsStartLat(lat) {
-		this.data.asset.gpsStartLat = lat;
-
-		return this.instance();
-	}
-
-	gpsFinishLong(long) {
-		this.data.asset.gpsFinishLong = long;
-
-		return this.instance();
-	}
-
-	gpsFinishLat(lat) {
-		this.data.asset.gpsFinishLat = lat;
+	gps(timestamp, lat, long) {
+		this.data.asset.gps.push({
+			timestamp: timestamp,
+			lat: lat,
+			long: long
+		});
 
 		return this.instance();
 	}
@@ -50,18 +38,6 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 
 	rideDuration(minutes) {
 		this.data.asset.rideDuration = minutes;
-
-		return this.instance();
-	}
-
-	optionalInteger(value) {
-		this.data.asset.optionalInteger = value;
-
-		return this.instance();
-	}
-
-	optionalNumber(value) {
-		this.data.asset.optionalNumber = value;
 
 		return this.instance();
 	}
