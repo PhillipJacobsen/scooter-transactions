@@ -77,7 +77,7 @@ module.exports = {
 			vendorField: SchemaParameters.VENDORFIELD,
 			asset: {
 				type: "object",
-				required: ["gps", "rentalStartTransactionId", "rideDuration"],
+				required: ["gps", "rentalStartTransactionId", "containsRefund", "rideDuration"],
 				properties: {
 					gps: {
 						type: "array",

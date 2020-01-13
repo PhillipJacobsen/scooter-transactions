@@ -44,15 +44,15 @@ const Schemas = {
 	},
 	GPS_POINT: {
 		type: "object",
-		required: ["timestamp", "long", "lat"],
+		required: ["timestamp", "lat", "long"],
 		properties: undefined
 	}
 };
 
 Schemas.GPS_POINT.properties = {
 	timestamp: Schemas.TIMESTAMP,
-	long: Schemas.GPS_COORDINATE,
-	lat: Schemas.GPS_COORDINATE
+	lat: Schemas.GPS_COORDINATE,
+	long: Schemas.GPS_COORDINATE
 };
 
 module.exports = Schemas;
