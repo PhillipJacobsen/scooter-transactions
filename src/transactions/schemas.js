@@ -41,24 +41,15 @@ module.exports = {
 			vendorField: SchemaParameters.VENDORFIELD,
 			asset: {
 				type: "object",
-				required: ["hash", "gps", "rate"],
+				required: ["sessionId", "gps", "rate"],
 				properties: {
-					hash: {
-						type: "string",
-						minLength: 1,
-						maxLength: 64
-					},
-					gps: {
-						type: "array",
-						minItems: 1,
-						maxItems: 1,
-						items: SchemaParameters.GPS_POINT
-					},
+					sessionId: SchemaParameters.SESSION_ID,
+					gps: SchemaParameters.GPS_POINT,
 					rate: {
 						bignumber: {
 							minimum: 1
 						}
-					},
+					}
 				}
 			}
 		}
@@ -77,7 +68,7 @@ module.exports = {
 			vendorField: SchemaParameters.VENDORFIELD,
 			asset: {
 				type: "object",
-				required: ["gps", "rentalStartTransactionId", "containsRefund", "rideDuration"],
+				required: ["gps", "sessionId", "containsRefund"],
 				properties: {
 					gps: {
 						type: "array",
@@ -85,9 +76,8 @@ module.exports = {
 						maxItems: 2,
 						items: SchemaParameters.GPS_POINT
 					},
-					rentalStartTransactionId: SchemaParameters.TRANSACTION_ID,
-					containsRefund: SchemaParameters.CONTAINS_REFUND,
-					rideDuration: SchemaParameters.RIDE_DURATION_IN_MINUTES,
+					sessionId: SchemaParameters.SESSION_ID,
+					containsRefund: SchemaParameters.CONTAINS_REFUND
 				}
 			}
 		}

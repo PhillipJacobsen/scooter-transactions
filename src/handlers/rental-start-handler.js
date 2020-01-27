@@ -43,7 +43,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
-		if(!transaction.data.asset.hash || !transaction.data.asset.gps || !transaction.data.asset.rate) {
+		if(!transaction.data.asset.sessionId || !transaction.data.asset.gps || !transaction.data.asset.rate) {
 			throw new Errors.IncompleteAssetError();
 		}
 
@@ -74,7 +74,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 		}
 
 		let transactions = processor.getTransactions().filter((transaction) => {
-			return transaction.type === this.getConstructor().type && transaction.asset.hash === data.asset.hash;
+			return transaction.type === this.getConstructor().type && transaction.asset.sessionId === data.asset.sessionId;
 		});
 
 		if(transactions.length > 1) {
@@ -84,7 +84,7 @@ class RentalStartHandler extends Transactions.Handlers.TransactionHandler {
 		}
 
 		transactions = Array.from(await pool.getTransactionsByType(this.getConstructor().type)).filter((transaction) => {
-			return transaction.data.asset.hash === data.asset.hash;
+			return transaction.data.asset.sessionId === data.asset.sessionId;
 		});
 
 		if(transactions.length > 1) {

@@ -4,6 +4,11 @@ const Schemas = {
 		minLength: 10,
 		maxLength: 10
 	},
+	SESSION_ID: {
+		type: "string",
+		minLength: 64,
+		maxLength: 64
+	},
 	INTEGER_PARAMETER: {
 		anyOf: [{type: "null"}, {type: "integer", maxLength: 64}]
 	},
@@ -16,18 +21,9 @@ const Schemas = {
 		maxLength: 16
 	},
 	TIMESTAMP: {
-		type: "object",
-		required: ["epoch", "human"],
-		properties: {
-			epoch: {
-				type: "integer",
-				minimum: 0
-			},
-			human: {
-				type: "string",
-				minimum: 0
-			}
-		}
+		type: "integer",
+		minLength: 10,
+		maxLength: 10
 	},
 	TRANSACTION_ID: {
 		$ref: "transactionId"
@@ -35,24 +31,20 @@ const Schemas = {
 	VENDORFIELD: {
 		anyOf: [{type: "null"}, {type: "string", format: "vendorField"}]
 	},
-	RIDE_DURATION_IN_MINUTES: {
-		type: "integer",
-		maxLength: 12
-	},
 	CONTAINS_REFUND: {
 		type: "boolean"
 	},
 	GPS_POINT: {
 		type: "object",
-		required: ["timestamp", "lat", "long"],
+		required: ["timestamp", "latitude", "longitude"],
 		properties: undefined
 	}
 };
 
 Schemas.GPS_POINT.properties = {
 	timestamp: Schemas.TIMESTAMP,
-	lat: Schemas.GPS_COORDINATE,
-	long: Schemas.GPS_COORDINATE
+	latitude: Schemas.GPS_COORDINATE,
+	longitude: Schemas.GPS_COORDINATE
 };
 
 module.exports = Schemas;

@@ -41,7 +41,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
-		if(!transaction.data.asset.gps || !transaction.data.asset.rideDuration || !transaction.data.asset.rentalStartTransactionId
+		if(!transaction.data.asset.gps || !transaction.data.asset.rideDuration || !transaction.data.asset.sessionId
 			|| !transaction.data.asset.containsRefund) {
 			throw new Errors.IncompleteAssetError();
 		}
@@ -55,8 +55,6 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		if(!sender.getAttribute(WalletAttributes.IS_RENTED)) {
 			throw new Errors.ScooterIsNotRented();
 		}
-
-		// TODO get tx by transaction.asset.rentalStartTransactionId and validate if scooterId matches.
 	}
 
 	emitEvents(transaction, emitter) {
@@ -73,17 +71,17 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 		}
 
 		let transactions = processor.getTransactions().filter((transaction) => {
-			return transaction.type === this.getConstructor().type && transaction.asset.rentalStartTransactionId === data.asset.rentalStartTransactionId;
+			return transaction.type === this.getConstructor().type && transaction.asset.sessionId === data.asset.sessionId;
 		});
 
 		if(transactions.length > 1) {
-			processor.pushError(data, 'ERR_CONFLICT', `Scooter with public key "${data.senderPublicKey}" is already rented.`);
+			processor.pushError(data, 'ERR_CONFLICT', `The rental for scooter with public key  "${data.senderPublicKey}" is already finished.`);
 
 			return false;
 		}
 
 		transactions = Array.from(await pool.getTransactionsByType(this.getConstructor().type)).filter((transaction) => {
-			return transaction.data.asset.rentalStartTransactionId === data.asset.rentalStartTransactionId;
+			return transaction.data.asset.sessionId === data.asset.sessionId;
 		});
 
 		if(transactions.length > 1) {

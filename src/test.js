@@ -31,7 +31,7 @@ if(args.txt === 'sr') {
 		.nonce(nonce)
 		.sign(passphrase));
 } else if(args.txt === 'rs') {
-	transactions.push(RentalStartBuilder.hash('asabasdb-123123-sdfsdf-lklsdf')
+	transactions.push(RentalStartBuilder.sessionId('sdfsdf-sdfdf-234234-sdf')
 		.gps(Date.now(), '10.1111111', '-20.2222222')
 		.rate('5')
 		.amount('1')
@@ -40,13 +40,12 @@ if(args.txt === 'sr') {
 		.vendorField(args.vf)
 		.sign(passphrase));
 } else if(args.txt === 'rf') {
-	transactions.push(RentalFinishBuilder.rentalStartTransactionId('e17b28198e4b5346fad726cefa6a189068c258058ee9b994e126642724c9d182')
+	transactions.push(RentalFinishBuilder.sessionId('sdfsdf-sdfdf-234234-sdf')
 		.gps(Date.now(), '10.1111111', '-20.2222222')
-		.gps(Date.now() + 11111, '15.1111111', '-25.2222222')
+		.gps(Date.now() + 90 * 1000, '15.1111111', '-25.2222222')
 		.amount('3333')
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 		.containsRefund(true)
-		.rideDuration(60)
 		.nonce(nonce)
 		.vendorField(args.vf)
 		.fee('10000000')

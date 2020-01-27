@@ -1,5 +1,6 @@
 const RentalFinishTransaction = require('../transactions/rental-finish-transaction');
 const Crypto = require('@arkecosystem/crypto');
+const BigNumber = require('bignumber.js');
 
 class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 	constructor() {
@@ -14,23 +15,19 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 		};
 	}
 
-	rentalStartTransactionId(id) {
-		this.data.asset.rentalStartTransactionId = id;
+	sessionId(id) {
+		this.data.asset.sessionId = Crypto.Crypto.HashAlgorithms.sha256(Buffer.from(id, 'hex')).toString('hex');
 
 		return this.instance();
 	}
 
-	// TODO create abstract class and move this function up.
-	gps(timestamp, lat, long) {
+	gps(timestamp, latitude, longitude) {
 		const date = new Date(timestamp);
 
 		this.data.asset.gps.push({
-			timestamp: {
-				epoch: Math.floor(date.getTime() / 1000),
-				human: date.toJSON()
-			},
-			lat: lat,
-			long: long
+			timestamp: Math.floor(date.getTime() / 1000),
+			latitude: (new BigNumber(latitude)).toString(),
+			longitude: (new BigNumber(longitude)).toString()
 		});
 
 		return this.instance();
@@ -38,12 +35,6 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 
 	containsRefund(bool) {
 		this.data.asset.containsRefund = bool;
-
-		return this.instance();
-	}
-
-	rideDuration(minutes) {
-		this.data.asset.rideDuration = minutes;
 
 		return this.instance();
 	}

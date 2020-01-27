@@ -24,19 +24,16 @@ class ScooterRegistrationTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	serialize() {
-		const {data} = this;
-		const bytes = Buffer.from(data.asset.scooterId, "utf8");
-		const buffer = new ByteBuffer(bytes.length, true);
+		const buffer = new ByteBuffer(10, true);
 
-		buffer.writeUint8(bytes.length);
-		buffer.append(bytes, "hex");
+		buffer.append(Buffer.from(this.data.asset.scooterId));
 
 		return buffer;
 	}
 
 	deserialize(buffer) {
 		this.data.asset = {
-			scooterId: buffer.readString(buffer.readUint8())
+			scooterId: buffer.readBytes(10).toBuffer().toString()
 		};
 	}
 }

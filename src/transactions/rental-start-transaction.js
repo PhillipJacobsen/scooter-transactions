@@ -1,6 +1,7 @@
-const Schema = require('./schemas').RentalStart;
-const Crypto = require('@arkecosystem/crypto');
-const ByteBuffer = require('bytebuffer');
+const Schema = require("./schemas").RentalStart;
+const Crypto = require("@arkecosystem/crypto");
+const BigNumber = require("bignumber.js");
+const ByteBuffer = require("bytebuffer");
 
 class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	static get typeGroup() {
@@ -28,34 +29,38 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	serialize() {
-		const properties = [
-			this.data.amount.toString(),
-			this.data.recipientId,
-			this.data.asset.hash,
-			JSON.stringify(this.data.asset.gps),
-			this.data.asset.rate.toString(),
-		];
+		const latitudeBuffer = Buffer.from(new BigNumber(this.data.asset.gps.latitude));
+		const longitudeBuffer = Buffer.from(new BigNumber(this.data.asset.gps.longitude));
 
-		const buffer = new ByteBuffer(properties.join('').length, true);
+		const buffer = new ByteBuffer(8 + 21 + 4 + 1 + latitudeBuffer.length + 1 + longitudeBuffer.length + 64 + 8, true);
 
-		for(const property of properties) {
-			let bytes = Buffer.from(property, "utf8");
-
-			buffer.writeUint8(bytes.length);
-			buffer.append(bytes);
-		}
+		buffer.writeUint64(this.data.amount.toString()); // 8
+		buffer.append(Crypto.Identities.Address.toBuffer(this.data.recipientId).addressBuffer); // 21
+		buffer.writeUint32(this.data.asset.gps.timestamp); // 4
+		buffer.writeUint8(latitudeBuffer.length); // 1
+		buffer.append(latitudeBuffer); // Varies
+		buffer.writeUint8(longitudeBuffer.length); // 1
+		buffer.append(longitudeBuffer); // Varies
+		buffer.append(Buffer.from(this.data.asset.sessionId)); // 64
+		buffer.writeUint64(this.data.asset.rate.toString()); // 8
 
 		return buffer;
 	}
 
 	deserialize(buffer) {
-		this.data.amount = Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()));
-		this.data.recipientId = buffer.readString(buffer.readUint8());
+		this.data.amount = Crypto.Utils.BigNumber.make(buffer.readUint64().toString());
+		this.data.recipientId = Crypto.Identities.Address.fromBuffer(buffer.readBytes(21).toBuffer());
 		this.data.asset = {
-			hash: buffer.readString(buffer.readUint8()),
-			gps: JSON.parse(buffer.readString(buffer.readUint8())),
-			rate: Crypto.Utils.BigNumber.make(buffer.readString(buffer.readUint8()))
+			gps: {
+				timestamp:  buffer.readUint32(),
+				latitude: buffer.readBytes(buffer.readUint8()).toBuffer().toString(),
+				longitude: buffer.readBytes(buffer.readUint8()).toBuffer().toString()
+			},
+			sessionId: buffer.readBytes(64).toBuffer().toString(),
+			rate: Crypto.Utils.BigNumber.make(buffer.readUint64().toString()),
 		};
+		this.data.asset.gpsCount = 1;
+		this.data.asset.gps.human = (new Date(this.data.asset.gps.timestamp * 1000)).toJSON();
 	}
 }
 
