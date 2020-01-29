@@ -31,8 +31,8 @@ if(args.txt === 'sr') {
 		.nonce(nonce)
 		.sign(passphrase));
 } else if(args.txt === 'rs') {
-	transactions.push(RentalStartBuilder.sessionId('sdfsdf-sdfdf-234234-sdf')
-		.gps(Date.now(), '10.1111111', '-20.2222222')
+	transactions.push(RentalStartBuilder.sessionId(Crypto.Crypto.HashAlgorithms.sha256('hello').toString('hex'))
+		.gps(Date.now(), '1.111111', '-180.222222')
 		.rate('5')
 		.amount('1')
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
@@ -40,9 +40,9 @@ if(args.txt === 'sr') {
 		.vendorField(args.vf)
 		.sign(passphrase));
 } else if(args.txt === 'rf') {
-	transactions.push(RentalFinishBuilder.sessionId('sdfsdf-sdfdf-234234-sdf')
-		.gps(Date.now(), '10.1111111', '-20.2222222')
-		.gps(Date.now() + 90 * 1000, '15.1111111', '-25.2222222')
+	transactions.push(RentalFinishBuilder.sessionId(Crypto.Crypto.HashAlgorithms.sha256('hello').toString('hex'))
+		.gps(Date.now(), '10.111111', '-20.222222')
+		.gps(Date.now() + 90 * 1000, '15.111111', '-25.222222')
 		.amount('3333')
 		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
 		.containsRefund(true)

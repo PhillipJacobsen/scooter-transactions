@@ -1,6 +1,5 @@
 const Schema = require("./schemas").RentalFinish;
 const Crypto = require("@arkecosystem/crypto");
-const BigNumber = require("bignumber.js");
 const ByteBuffer = require("bytebuffer");
 
 class RentalFinishTransaction extends Crypto.Transactions.Transaction {
@@ -29,30 +28,17 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	serialize() {
-		const latitudeStartBuffer = Buffer.from(new BigNumber(this.data.asset.gps[0].latitude));
-		const longitudeStartBuffer = Buffer.from(new BigNumber(this.data.asset.gps[0].longitude));
-		const latitudeFinishBuffer = Buffer.from(new BigNumber(this.data.asset.gps[1].latitude));
-		const longitudeFinishBuffer = Buffer.from(new BigNumber(this.data.asset.gps[1].longitude));
-		const gpsBytesLength = 4 + 1 + latitudeStartBuffer.length + 1 + longitudeStartBuffer.length
-			+ 4 + 1 + latitudeFinishBuffer.length + 1 + longitudeFinishBuffer.length;
-		const buffer = new ByteBuffer(8 + 21 + gpsBytesLength + 64 + 1, true);
+		const buffer = new ByteBuffer(8 + 21 + 4 + 8 + 8 + 4 + 8 + 8 + 32 + 1, true);
 
 		buffer.writeUint64(this.data.amount.toString()); // 8
 		buffer.append(Crypto.Identities.Address.toBuffer(this.data.recipientId).addressBuffer); // 21
-
 		buffer.writeUint32(this.data.asset.gps[0].timestamp); // 4
-		buffer.writeUint8(latitudeStartBuffer.length); // 1
-		buffer.append(latitudeStartBuffer); // Varies
-		buffer.writeUint8(longitudeStartBuffer.length); // 1
-		buffer.append(longitudeStartBuffer); // Varies
-
+		buffer.writeInt64(parseFloat(this.data.asset.gps[0].latitude).toFixed(6).replace('.', '')); // 8
+		buffer.writeInt64(parseFloat(this.data.asset.gps[0].longitude).toFixed(6).replace('.', '')); // 8
 		buffer.writeUint32(this.data.asset.gps[1].timestamp); // 4
-		buffer.writeUint8(latitudeFinishBuffer.length); // 1
-		buffer.append(latitudeFinishBuffer); // Varies
-		buffer.writeUint8(longitudeFinishBuffer.length); // 1
-		buffer.append(longitudeFinishBuffer); // Varies
-
-		buffer.append(Buffer.from(this.data.asset.sessionId)); // 64
+		buffer.writeInt64(parseFloat(this.data.asset.gps[1].latitude).toFixed(6).replace('.', '')); // 8
+		buffer.writeInt64(parseFloat(this.data.asset.gps[1].longitude).toFixed(6).replace('.', '')); // 8
+		buffer.append(Buffer.from(this.data.asset.sessionId, 'hex')); // 32
 		buffer.writeUint8(this.data.asset.containsRefund ? 1 : 0); // 1
 
 		return buffer;
@@ -64,14 +50,14 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 		this.data.asset = {
 			gps: [{
 				timestamp: buffer.readUint32(),
-				latitude: buffer.readBytes(buffer.readUint8()).toBuffer().toString(),
-				longitude: buffer.readBytes(buffer.readUint8()).toBuffer().toString()
+				latitude: formatGpsCoordinate(buffer.readInt64().toString()),
+				longitude: formatGpsCoordinate(buffer.readInt64().toString()),
 			}, {
 				timestamp: buffer.readUint32(),
-				latitude: buffer.readBytes(buffer.readUint8()).toBuffer().toString(),
-				longitude: buffer.readBytes(buffer.readUint8()).toBuffer().toString()
+				latitude: formatGpsCoordinate(buffer.readInt64().toString()),
+				longitude: formatGpsCoordinate(buffer.readInt64().toString()),
 			}],
-			sessionId: buffer.readBytes(64).toBuffer().toString(),
+			sessionId: buffer.readBytes(32).toBuffer().toString('hex'),
 			containsRefund: Boolean(buffer.readUint8().toString())
 		};
 		this.data.asset.gpsCount = this.data.asset.gps.length;
@@ -79,6 +65,10 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 		this.data.asset.gps[1].human = (new Date(this.data.asset.gps[1].timestamp * 1000)).toJSON();
 		this.data.asset.rideDuration = this.data.asset.gps[1].timestamp - this.data.asset.gps[0].timestamp;
 	}
+}
+
+function formatGpsCoordinate(str) {
+	return str.slice(0, str.length - 6) + '.' + str.slice(-6);
 }
 
 module.exports = RentalFinishTransaction;

@@ -17,8 +17,8 @@ const Schemas = {
 	},
 	GPS_COORDINATE: {
 		type: "string",
-		minLength: 1,
-		maxLength: 16
+		minLength: 8,
+		maxLength: 11
 	},
 	TIMESTAMP: {
 		type: "integer",

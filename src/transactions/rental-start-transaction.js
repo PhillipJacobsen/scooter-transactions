@@ -1,7 +1,7 @@
 const Schema = require("./schemas").RentalStart;
 const Crypto = require("@arkecosystem/crypto");
-const BigNumber = require("bignumber.js");
 const ByteBuffer = require("bytebuffer");
+const Long = require('long');
 
 class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	static get typeGroup() {
@@ -29,19 +29,14 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 	}
 
 	serialize() {
-		const latitudeBuffer = Buffer.from(new BigNumber(this.data.asset.gps.latitude));
-		const longitudeBuffer = Buffer.from(new BigNumber(this.data.asset.gps.longitude));
+		const buffer = new ByteBuffer(8 + 21 + 4 + 8 + 8 + 32 + 8, true);
 
-		const buffer = new ByteBuffer(8 + 21 + 4 + 1 + latitudeBuffer.length + 1 + longitudeBuffer.length + 64 + 8, true);
-
-		buffer.writeUint64(this.data.amount.toString()); // 8
+		buffer.writeUint64(Long.fromString(this.data.amount.toString())); // 8
 		buffer.append(Crypto.Identities.Address.toBuffer(this.data.recipientId).addressBuffer); // 21
 		buffer.writeUint32(this.data.asset.gps.timestamp); // 4
-		buffer.writeUint8(latitudeBuffer.length); // 1
-		buffer.append(latitudeBuffer); // Varies
-		buffer.writeUint8(longitudeBuffer.length); // 1
-		buffer.append(longitudeBuffer); // Varies
-		buffer.append(Buffer.from(this.data.asset.sessionId)); // 64
+		buffer.writeInt64(parseFloat(this.data.asset.gps.latitude).toFixed(6).replace('.', '')); // 8
+		buffer.writeInt64(parseFloat(this.data.asset.gps.longitude).toFixed(6).replace('.', '')); // 8
+		buffer.append(Buffer.from(this.data.asset.sessionId, 'hex')); // 32
 		buffer.writeUint64(this.data.asset.rate.toString()); // 8
 
 		return buffer;
@@ -53,15 +48,19 @@ class RentalStartTransaction extends Crypto.Transactions.Transaction {
 		this.data.asset = {
 			gps: {
 				timestamp:  buffer.readUint32(),
-				latitude: buffer.readBytes(buffer.readUint8()).toBuffer().toString(),
-				longitude: buffer.readBytes(buffer.readUint8()).toBuffer().toString()
+				latitude: formatGpsCoordinate(buffer.readInt64().toString()),
+				longitude: formatGpsCoordinate(buffer.readInt64().toString()),
 			},
-			sessionId: buffer.readBytes(64).toBuffer().toString(),
+			sessionId: buffer.readBytes(32).toBuffer().toString('hex'),
 			rate: Crypto.Utils.BigNumber.make(buffer.readUint64().toString()),
 		};
 		this.data.asset.gpsCount = 1;
 		this.data.asset.gps.human = (new Date(this.data.asset.gps.timestamp * 1000)).toJSON();
 	}
+}
+
+function formatGpsCoordinate(str) {
+	return str.slice(0, str.length - 6) + '.' + str.slice(-6);
 }
 
 module.exports = RentalStartTransaction;
