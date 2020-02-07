@@ -77,8 +77,8 @@ for(const transaction of transactions) {
 }
 
 console.log('\n---------- COMMAND ----------');
-const command = "curl --request POST --url https://radians.nl/api/transactions " +
-	`--header 'content-type: application/json' --data '${JSON.stringify(payload)}'`;
+const command = 'curl --request POST --url https://radians.nl/api/transactions ' +
+	'--header "content-type: application/json" --data ' + JSON.stringify(JSON.stringify(payload));
 console.log(command);
 
 if(!args.d) {
