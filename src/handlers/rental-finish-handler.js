@@ -58,7 +58,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 	}
 
 	emitEvents(transaction, emitter) {
-		emitter.emit(Events.RENTAL_START, transaction.data);
+		emitter.emit(Events.RENTAL_FINISH, transaction.data);
 	}
 
 	async canEnterTransactionPool(data, pool, processor) {
