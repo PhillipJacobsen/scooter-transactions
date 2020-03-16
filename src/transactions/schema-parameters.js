@@ -32,7 +32,7 @@ const Schemas = {
 		anyOf: [{type: "null"}, {type: "string", format: "vendorField"}]
 	},
 	CONTAINS_REFUND: {
-		enum: [ true, false ] 
+		type: "boolean",
 	},
 	GPS_POINT: {
 		type: "object",

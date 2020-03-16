@@ -42,7 +42,7 @@ class RentalFinishHandler extends Transactions.Handlers.TransactionHandler {
 
 	async throwIfCannotBeApplied(transaction, sender, walletManager) {
 		if(!transaction.data.asset.gps || !transaction.data.asset.rideDuration || !transaction.data.asset.sessionId
-			|| !transaction.data.asset.containsRefund) {
+			|| typeof transaction.data.asset.containsRefund !== 'boolean') {
 			throw new Errors.IncompleteAssetError();
 		}
 
