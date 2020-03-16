@@ -58,8 +58,9 @@ class RentalFinishTransaction extends Crypto.Transactions.Transaction {
 				longitude: formatGpsCoordinate(buffer.readInt64().toString()),
 			}],
 			sessionId: buffer.readBytes(32).toBuffer().toString('hex'),
-			containsRefund: Boolean(buffer.readUint8().toString())
+			containsRefund: Boolean(buffer.readUint8())
 		};
+
 		this.data.asset.gpsCount = this.data.asset.gps.length;
 		this.data.asset.gps[0].human = (new Date(this.data.asset.gps[0].timestamp * 1000)).toJSON();
 		this.data.asset.gps[1].human = (new Date(this.data.asset.gps[1].timestamp * 1000)).toJSON();
