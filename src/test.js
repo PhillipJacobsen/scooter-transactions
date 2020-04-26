@@ -10,7 +10,12 @@ const childProcess = require('child_process');
 const config = require("./bridgechain-config");
 const args = require("./args");
 const nonce = args.nonce || '1';
-const passphrase = 'jar width fee ostrich fantasy vehicle thank doctor teach family bottom trap';
+const passphrase_scooter = 'afford thumb forward wall salad diet title patch holiday metal cement wisdom';		//scooter wallet  TRXA2NUACckkYwWnS9JRkATQA453ukAcD1
+const passphrase_rider = 'differ eternal pulp give return wave head confirm grief aim lumber violin';		//rider wallet  TLdYHTKRSD3rG66zsytqpAgJDX75qbcvgT
+const address_scooter = 'TRXA2NUACckkYwWnS9JRkATQA453ukAcD1';
+const address_rider = 'TLdYHTKRSD3rG66zsytqpAgJDX75qbcvgT';
+
+
 
 console.log('\n---------- ARGS ----------');
 console.log(args);
@@ -29,34 +34,35 @@ let transactions = [];
 if(args.txt === 'sr') {
 	transactions.push(ScooterRegistrationBuilder.scooterId('1234567890')
 		.nonce(nonce)
-		.sign(passphrase));
+		.sign(passphrase_scooter));
 } else if(args.txt === 'rs') {
 	transactions.push(RentalStartBuilder.sessionId(Crypto.Crypto.HashAlgorithms.sha256('hello').toString('hex'))
+	//transactions.push(RentalStartBuilder.sessionId('1234300000000000000000000000000000000000000000000000000000000000')
 		.gps(Date.now(), '1.111111', '-180.222222')
 		.rate('5')
-		.amount('1')
-		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
+		.amount('3700000')  //this determines the ride length
+		.recipientId(address_scooter)
 		.nonce(nonce)
 		.vendorField(args.vf)
-		.sign(passphrase));
+		.sign(passphrase_rider));
 } else if(args.txt === 'rf') {
 	transactions.push(RentalFinishBuilder.sessionId(Crypto.Crypto.HashAlgorithms.sha256('hello').toString('hex'))
 		.gps(Date.now(), '10.111111', '-20.222222')
 		.gps(Date.now() + 90 * 1000, '15.111111', '-25.222222')
-		.amount('3333')
-		.recipientId('TGGUtM6KPdWn7LSpNcWj1y5ngGa8xJqxHf')
+		.amount('1')
+		.recipientId(address_rider)
 		.containsRefund(true)
 		.nonce(nonce)
 		.vendorField(args.vf)
 		.fee('10000000')
-		.sign(passphrase));
+		.sign(passphrase_scooter));
 } else if(args.txt === 't') {
-	transactions.push(TransactionBuilder.amount(1)
+	transactions.push(TransactionBuilder.amount('1')
 		.version(2)
-		.recipientId('TEBFiv6emzoY6i4znYGrFeWiKyTRimhNWe')
+		.recipientId(address_scooter)
 		.vendorField(args.vf)
 		.nonce(nonce)
-		.sign(passphrase));
+		.sign(passphrase_rider));
 }
 
 let payload = {
@@ -77,8 +83,12 @@ for(const transaction of transactions) {
 }
 
 console.log('\n---------- COMMAND ----------');
+	
 const command = 'curl --request POST --url https://radians.nl/api/transactions ' +
 	'--header "content-type:application/json" --data ' + JSON.stringify(JSON.stringify(payload));
+
+
+	
 console.log(command);
 
 if(!args.d) {
