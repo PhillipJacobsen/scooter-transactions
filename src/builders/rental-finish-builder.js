@@ -4,14 +4,7 @@ const Crypto = require('@arkecosystem/crypto');
 class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 	constructor() {
 		super();
-		this.data.type = RentalFinishTransaction.type;
-		this.data.typeGroup = RentalFinishTransaction.typeGroup;
-		this.data.version = 2;
-		this.data.fee = RentalFinishTransaction.defaultStaticFee;
-		this.data.amount = Crypto.Utils.BigNumber.ZERO;
-		this.data.asset = {
-			gps: []
-		};
+		this.reset();
 	}
 
 	sessionId(sha256) {
@@ -51,6 +44,17 @@ class RentalFinishBuilder extends Crypto.Transactions.TransactionBuilder {
 
 	instance() {
 		return this;
+	}
+
+	reset() {
+		this.data.type = RentalFinishTransaction.type;
+		this.data.typeGroup = RentalFinishTransaction.typeGroup;
+		this.data.version = 2;
+		this.data.fee = RentalFinishTransaction.defaultStaticFee;
+		this.data.amount = Crypto.Utils.BigNumber.ZERO;
+		this.data.asset = {
+			gps: []
+		};
 	}
 }
 
