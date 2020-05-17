@@ -10,10 +10,10 @@ const childProcess = require('child_process');
 const config = require("./bridgechain-config");
 const args = require("./args");
 const nonce = args.nonce || '1';
-const passphrase_scooter = 'afford thumb forward wall salad diet title patch holiday metal cement wisdom';		//scooter wallet  TRXA2NUACckkYwWnS9JRkATQA453ukAcD1
-const passphrase_rider = 'differ eternal pulp give return wave head confirm grief aim lumber violin';		//rider wallet  TLdYHTKRSD3rG66zsytqpAgJDX75qbcvgT
-const address_scooter = 'TRXA2NUACckkYwWnS9JRkATQA453ukAcD1';
-const address_rider = 'TLdYHTKRSD3rG66zsytqpAgJDX75qbcvgT';
+const passphrase_scooter = 'steel digital luxury lawsuit floor script pig knock uniform all sick embark';		//scooter wallet  TUtc5kn9PnVJZKyAvovBBacHtmmiaK9Stv
+const passphrase_rider = 'sure churn wrong reward middle rebuild silk treat tenant again need gain';		//rider wallet  TU5z9Q8DVFHLHMF8SEPQZrrEyrsG4iUSVP
+const address_scooter = 'TUtc5kn9PnVJZKyAvovBBacHtmmiaK9Stv';
+const address_rider = 'TU5z9Q8DVFHLHMF8SEPQZrrEyrsG4iUSVP';
 
 
 
@@ -84,7 +84,8 @@ for(const transaction of transactions) {
 
 console.log('\n---------- COMMAND ----------');
 	
-const command = 'curl --request POST --url https://radians.nl/api/transactions ' +
+	//-k ignores invalid ssl certificates
+const command = 'curl -k --request POST --url https://radians.nl/api/transactions ' +
 	'--header "content-type:application/json" --data ' + JSON.stringify(JSON.stringify(payload));
 
 

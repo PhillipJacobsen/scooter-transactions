@@ -12,9 +12,9 @@
     "t": "node ./src/test.js --txt t"
   },
   "dependencies": {
-    "@arkecosystem/core-event-emitter": "^2.6.0-next.7",
-    "@arkecosystem/core-transactions": "^2.6.0-next.7",
-    "@arkecosystem/crypto": "^2.6.0-next.7"
+    "@arkecosystem/core-event-emitter": "^2.6.37",
+    "@arkecosystem/core-transactions": "^2.6.37",
+    "@arkecosystem/crypto": "^2.6.37"
   },
   "homepage": "https://github.com/e-m-s-y/scooter-transactions",
   "repository": {
